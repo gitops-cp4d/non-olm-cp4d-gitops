@@ -11,8 +11,8 @@ spec:
   source:
     path: ''
     repoURL: {{ .Values.global.helmRepoURL }}
-    targetRevision: {{ index .Values.apps "planning-analytics" "version" }}
-    chart: {{ index .Values.apps "planning-analytics" "chart" }}
+    targetRevision: {{ index .Values.global.apps "planning-analytics" "version" }}
+    chart: {{ index .Values.global.apps "planning-analytics" "chart" }}
     helm:
       valuesObject:
         global:

@@ -11,8 +11,8 @@ spec:
   source:
     path: ''
     repoURL: {{ .Values.global.helmRepoURL }}
-    targetRevision: {{ index .Values.apps "ibm-licensing-cluster" "version" }}
-    chart: {{ index .Values.apps "ibm-licensing-cluster" "chart" }}
+    targetRevision: {{ index .Values.global.apps "ibm-licensing-cluster" "version" }}
+    chart: {{ index .Values.global.apps "ibm-licensing-cluster" "chart" }}
     helm:
       valuesObject:
         global:

@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: planning-analytics-cluster-{{ .Values.global.appSuffix }}
+  name: cpd-platform-cluster-{{ .Values.global.appSuffix }}
   namespace: {{ .Values.global.argocdNS }}
 spec:
   destination:
@@ -11,8 +11,8 @@ spec:
   source:
     path: ''
     repoURL: {{ .Values.global.helmRepoURL }}
-    targetRevision: {{ index .Values.apps "planning-analytics-cluster" "version" }}
-    chart: {{ index .Values.apps "planning-analytics-cluster" "chart" }}
+    targetRevision: {{ index .Values.global.apps "cpd-platform-cluster" "version" }}
+    chart: {{ index .Values.global.apps "cpd-platform-cluster" "chart" }}
     helm:
       valuesObject:
         global:

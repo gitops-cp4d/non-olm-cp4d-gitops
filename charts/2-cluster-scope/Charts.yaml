@@ -1,0 +1,5 @@
+apiVersion: v2
+name: 2-cluster-scope
+description: Cluster scoped resources (CRDs, ClusterRole)
+type: application
+version: 0.1.0

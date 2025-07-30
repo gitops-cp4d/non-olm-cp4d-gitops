@@ -1,5 +1,16 @@
 apiVersion: v2
-appVersion: 0.0.1
-name: gitops-cp4d-non-olms
+name: westpac-cpd-deployment
+description: A Helm chart for non-olms approach to deploy the CPD stack via Argo CD
 type: application
-version: 0.0.1
+version: 0.1.0
+
+dependencies:
+  - name: 1-foundation
+    version: "0.1.0"
+    repository: "file://./charts/1-foundation" 
+  - name: 2-cluster-scope
+    version: "0.1.0"
+    repository: "file://./charts/2-cluster-scope"
+  - name: 3-namespace-scope
+    version: "0.1.0"
+    repository: "file://./charts/3-namespace-scope"

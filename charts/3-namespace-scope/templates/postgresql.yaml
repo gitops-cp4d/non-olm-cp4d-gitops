@@ -1,15 +1,9 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: zen-{{ .Values.global.appSuffix }}
+  name: postgresql-{{ .Values.global.appSuffix }}
   namespace: {{ .Values.global.argocdNS }}
 spec:
-  ignoreDifferences:
-    - kind: "*"
-      group: "*"
-      jsonPointers:
-        - /metadata/annotations
-        - /metadata/labels
   destination:
     name: ''
     namespace: default
@@ -17,8 +11,8 @@ spec:
   source:
     path: ''
     repoURL: {{ .Values.global.helmRepoURL }}
-    targetRevision: {{ .Values.apps.zen.version }}
-    chart: {{ .Values.apps.zen.chart }}
+    targetRevision: {{ .Values.global.apps.postgresql.version }}
+    chart: {{ .Values.global.apps.postgresql.chart }}
     helm:
       valuesObject:
         global:
@@ -31,5 +25,6 @@ spec:
           imagePullSecret: {{ .Values.global.imagePullSecret }}
           installConfigImageDigest: {{ .Values.global.installConfigImageDigest }}
           installConfigImageName: cpopen/cpd/olm-utils-v3
-          releaseVersion: 5.2.0
+        postgresql:
+          entitledImagePullPrefix: cp.icr.io
   project: default

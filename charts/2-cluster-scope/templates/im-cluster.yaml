@@ -10,8 +10,8 @@ spec:
     server: https://kubernetes.default.svc
   source:
     repoURL: {{ .Values.global.helmRepoURL }}
-    targetRevision: {{ index .Values.apps "im-cluster" "version" }}
-    chart: {{ index .Values.apps "im-cluster" "chart" }}
+    targetRevision: {{ index .Values.global.apps "im-cluster" "version" }}
+    chart: {{ index .Values.global.apps "im-cluster" "chart" }}
     helm:
       valuesObject:
         global:

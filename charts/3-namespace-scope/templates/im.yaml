@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: platform-config-{{ .Values.global.appSuffix }}
+  name: im-{{ .Values.global.appSuffix }}
   namespace: {{ .Values.global.argocdNS }}
 spec:
   destination:
@@ -11,24 +11,20 @@ spec:
   source:
     path: ''
     repoURL: {{ .Values.global.helmRepoURL }}
-    targetRevision: {{ index .Values.apps "platform-config" "version" }}
-    chart: {{ index .Values.apps "platform-config" "chart" }}
+    targetRevision: {{ .Values.global.apps.im.version }}
+    chart: {{ .Values.global.apps.im.chart }}
     helm:
       valuesObject:
         global:
           licenseAccept: true
-          releaseVersion: {{ .Values.global.releaseVersion | default "5.2.0" }}
           operatorNamespace: {{ .Values.global.operatorNS }}
           instanceNamespace: {{ .Values.global.instanceNS }}
+          tetheredNamespaces: []
+          releaseVersion: 5.2.0
+          blockStorageClass: {{ .Values.global.blockStorageClass }}
+          fileStorageClass: {{ .Values.global.fileStorageClass }}
           imagePullPrefix: {{ .Values.global.imagePullPrefix }}
           imagePullSecret: {{ .Values.global.imagePullSecret }}
           installConfigImageDigest: {{ .Values.global.installConfigImageDigest }}
           installConfigImageName: cpopen/cpd/olm-utils-v3
-          components:
-            - planning_analytics
-            - cpd_platform
-        commands:
-          applyEntitlement:
-            - entitlement: cpd-enterprise
-              production: "false"
   project: default
