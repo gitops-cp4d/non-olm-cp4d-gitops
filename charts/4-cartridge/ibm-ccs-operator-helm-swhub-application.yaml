@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ibm-ccs-operator-helm-{{ .Values.global.appSuffix }}
+  namespace: {{ .Values.global.argocdNS }}
+spec:
+  destination:
+    name: ''
+    namespace: default
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: {{ .Values.global.helmRepoURLdev }}
+    targetRevision: main
+    path: repos
+    chart: ibm-ccs-operator-helm
+    helm:
+      releaseName: ibm-ccs-operator-helm
+      valueFiles:
+        - ../../values.yaml
+  project: default

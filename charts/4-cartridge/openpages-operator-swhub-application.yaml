@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: openpages-operator-{{ .Values.global.appSuffix }}
+  namespace: {{ .Values.global.argocdNS }}
+spec:
+  destination:
+    name: ''
+    namespace: default
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: {{ .Values.global.helmRepoURLdev }}
+    targetRevision: main
+    path: repos
+    chart: openpages-operator
+    helm:
+      releaseName: openpages-operator
+      valueFiles:
+        - ../../values.yaml
+  project: default

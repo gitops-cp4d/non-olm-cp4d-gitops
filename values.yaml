@@ -8,9 +8,9 @@ global:
   imagePullPrefix: icr.io
   imagePullSecret: ibm-entitlement-key
   argocdNS: openshift-gitops
-  helmRepoURL: https://github.com/gitops-cp4d/non-olm-cp4d-gitops.git/repos
+  helmRepoURL: https://gitops-cp4d.github.io/non-olm-cp4d-gitops/repos
+  helmRepoURLdev: https://github.com/gitops-cp4d/non-olm-cp4d-gitops.git ## Dev
   installConfigImageDigest: "sha256:f97f1b364a27acfe08b1c80d9ce91c25f07e6005a7ba821abf164c8e38925a04"
-
   apps:
     ## cluster scoped charts
     cpd-platform-cluster:
