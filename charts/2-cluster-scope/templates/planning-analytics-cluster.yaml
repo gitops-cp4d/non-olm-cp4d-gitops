@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: zen-cluster-{{ .Values.global.appSuffix }}
+  name: planning-analytics-cluster-{{ .Values.global.appSuffix }}
   namespace: {{ .Values.global.argocdNS }}
 spec:
   destination:
@@ -11,8 +11,8 @@ spec:
   source:
     path: ''
     repoURL: {{ .Values.global.helmRepoURL }}
-    targetRevision: {{ index .Values.apps "zen-cluster" "version" }}
-    chart: {{ index .Values.apps "zen-cluster" "chart" }}
+    targetRevision: {{ index .Values.global.apps "planning-analytics-cluster" "version" }}
+    chart: {{ index .Values.global.apps "planning-analytics-cluster" "chart" }}
     helm:
       valuesObject:
         global:

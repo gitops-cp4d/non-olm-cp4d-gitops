@@ -1,12 +1,9 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: postgresql-cluster-{{ .Values.global.appSuffix }}
+  name: zen-cluster-{{ .Values.global.appSuffix }}
   namespace: {{ .Values.global.argocdNS }}
 spec:
-  syncPolicy:
-    syncOptions:
-      - ServerSideApply=true
   destination:
     name: ''
     namespace: default
@@ -14,8 +11,8 @@ spec:
   source:
     path: ''
     repoURL: {{ .Values.global.helmRepoURL }}
-    targetRevision: {{ index .Values.apps "postgresql-cluster" "version" }}
-    chart: {{ index .Values.apps "postgresql-cluster" "chart" }}
+    targetRevision: {{ index .Values.global.apps "zen-cluster" "version" }}
+    chart: {{ index .Values.global.apps "zen-cluster" "chart" }}
     helm:
       valuesObject:
         global:

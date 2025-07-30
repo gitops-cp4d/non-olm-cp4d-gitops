@@ -11,8 +11,8 @@ spec:
   source:
     path: ''
     repoURL: {{ .Values.global.helmRepoURL }}
-    targetRevision: {{ index .Values.apps "cpd-platform" "version" }}
-    chart: {{ index .Values.apps "cpd-platform" "chart" }}
+    targetRevision: {{ index .Values.global.apps "cpd-platform" "version" }}
+    chart: {{ index .Values.global.apps "cpd-platform" "chart" }}
     helm:
       valuesObject:
         global:

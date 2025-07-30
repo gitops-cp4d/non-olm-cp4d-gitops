@@ -1,9 +1,15 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cs-{{ .Values.global.appSuffix }}
+  name: zen-{{ .Values.global.appSuffix }}
   namespace: {{ .Values.global.argocdNS }}
 spec:
+  ignoreDifferences:
+    - kind: "*"
+      group: "*"
+      jsonPointers:
+        - /metadata/annotations
+        - /metadata/labels
   destination:
     name: ''
     namespace: default
@@ -11,17 +17,19 @@ spec:
   source:
     path: ''
     repoURL: {{ .Values.global.helmRepoURL }}
-    targetRevision: {{ .Values.apps.cs.version }}
-    chart: {{ .Values.apps.cs.chart }}
+    targetRevision: {{ .Values.global.apps.zen.version }}
+    chart: {{ .Values.global.apps.zen.chart }}
     helm:
       valuesObject:
         global:
           licenseAccept: true
-          releaseVersion: 5.2.0
           operatorNamespace: {{ .Values.global.operatorNS }}
           instanceNamespace: {{ .Values.global.instanceNS }}
           blockStorageClass: {{ .Values.global.blockStorageClass }}
           fileStorageClass: {{ .Values.global.fileStorageClass }}
           imagePullPrefix: {{ .Values.global.imagePullPrefix }}
           imagePullSecret: {{ .Values.global.imagePullSecret }}
+          installConfigImageDigest: {{ .Values.global.installConfigImageDigest }}
+          installConfigImageName: cpopen/cpd/olm-utils-v3
+          releaseVersion: 5.2.0
   project: default
