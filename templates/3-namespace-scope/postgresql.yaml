@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgresql-{{ .Values.global.appSuffix }}
+  namespace: {{ .Values.global.argocdNS }}
+spec:
+  destination:
+    name: ''
+    namespace: default
+    server: https://kubernetes.default.svc
+  source:
+    path: ''
+    repoURL: {{ .Values.global.helmRepoURL }}
+    targetRevision: {{ .Values.apps.postgresql.version }}
+    chart: {{ .Values.apps.postgresql.chart }}
+    helm:
+      valuesObject:
+        global:
+          licenseAccept: true
+          operatorNamespace: {{ .Values.global.operatorNS }}
+          instanceNamespace: {{ .Values.global.instanceNS }}
+          blockStorageClass: {{ .Values.global.blockStorageClass }}
+          fileStorageClass: {{ .Values.global.fileStorageClass }}
+          imagePullPrefix: {{ .Values.global.imagePullPrefix }}
+          imagePullSecret: {{ .Values.global.imagePullSecret }}
+          installConfigImageDigest: {{ .Values.global.installConfigImageDigest }}
+          installConfigImageName: cpopen/cpd/olm-utils-v3
+        postgresql:
+          entitledImagePullPrefix: cp.icr.io
+  project: default

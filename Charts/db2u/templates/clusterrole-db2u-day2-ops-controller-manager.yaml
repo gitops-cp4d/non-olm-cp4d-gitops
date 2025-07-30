@@ -1,0 +1,111 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: db2u-day2-ops-controller-manager
+rules:
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - db2uclusters
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - db2uinstances
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - db2ubnr.databases.ibm.com
+    resources:
+      - db2ubackups
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - db2ubnr.databases.ibm.com
+    resources:
+      - db2ubackups/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - db2ubnr.databases.ibm.com
+    resources:
+      - db2ubackups/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - db2ubnr.databases.ibm.com
+    resources:
+      - db2urestores
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - db2ubnr.databases.ibm.com
+    resources:
+      - db2urestores/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - db2ubnr.databases.ibm.com
+    resources:
+      - db2urestores/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - db2ulog.databases.ibm.com
+    resources:
+      - db2ulogstreams
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - db2ulog.databases.ibm.com
+    resources:
+      - db2ulogstreams/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - db2ulog.databases.ibm.com
+    resources:
+      - db2ulogstreams/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - authentication.k8s.io
+    resources:
+      - tokenreviews
+    verbs:
+      - create
+  - apiGroups:
+      - authorization.k8s.io
+    resources:
+      - subjectaccessreviews
+    verbs:
+      - create

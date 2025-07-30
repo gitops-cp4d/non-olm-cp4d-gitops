@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibm-opensearch-operator-controller-manager
+  namespace: {{ .Values.global.operatorNamespace }}
+  labels:
+    app.kubernetes.io/component: manager
+    app.kubernetes.io/created-by: ibm-opensearch-operator
+    app.kubernetes.io/instance: controller-manager
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: deployment
+    app.kubernetes.io/part-of: ibm-opensearch-operator
+    control-plane: controller-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: ibm-opensearch-operator
+      app.kubernetes.io/managed-by: ibm-opensearch-operator
+      app.kubernetes.io/name: ibm-opensearch-operator
+      control-plane: controller-manager
+      intent: projected
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+        productChargedContainers: "All"
+        productID: 3be23cc87d094c5f8bd6d73fe149248c
+        productMetric: FREE
+        productName: Cloud Pak Open
+        productVersion: 1.0.0
+      labels:
+        app.kubernetes.io/instance: ibm-opensearch-operator
+        app.kubernetes.io/managed-by: ibm-opensearch-operator
+        app.kubernetes.io/name: ibm-opensearch-operator
+        control-plane: controller-manager
+        intent: projected
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+                - arm64
+                - ppc64le
+                - s390x
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                - linux
+      containers:
+      - args:
+        - --leader-elect
+        command:
+        - /manager
+        env:
+        - name: WATCH_NAMESPACE
+          valueFrom:
+            configMapKeyRef:
+              name: namespace-scope
+              key: namespaces
+        - name: LEADER_ELECTION_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: RECONCILE_WAIT_TIME_MINUTES
+          value: "5"
+        - name: RELATED_IMAGE_OPENSEARCH_MIN
+          value: cp.icr.io/cp/opencontent-ibm-opensearch-min-2.19.1@sha256:2119a0eecb9171d39a7f7723873f03488fb1699df8a25486e7c6ee75228cc53f
+        - name: RELATED_IMAGE_OPENSEARCH_PLUGINS
+          value: cp.icr.io/cp/opencontent-ibm-opensearch-plugins-2.19.1@sha256:aba2b48fc177b3998d300f06808d250fbbe4c8b0137551c5bd52a3f7fb8ffd89
+        - name: RELATED_IMAGE_OPENSEARCH_SECURITY
+          value: cp.icr.io/cp/opencontent-ibm-opensearch-plugin-security-2.19.1.0@sha256:60153e3e320b2b81a149f045a6c61e412fdec096f7835c90d7254931085ad55c
+        - name: RELATED_IMAGE_BASE_IMAGE
+          value: cp.icr.io/cp/opencontent-ibm-opensearch-base-10@sha256:8b54cabe45e114d37c091b435b314b07c31e7d7c01d2f503336ab13a4fbfe9a7
+        - name: RELATED_IMAGE_OPENSEARCH_PLUGIN_ISM
+          value: cp.icr.io/cp/opencontent-ibm-opensearch-plugin-ism-2.19.1.0@sha256:479d22a897c9ad1a359578e36601a12c32f355d6b33a75acf36aec9c28b7b3c7
+        - name: RELATED_IMAGE_OPENSEARCH_PLUGIN_KNN
+          value: cp.icr.io/cp/opencontent-ibm-opensearch-plugin-knn-2.19.1.0@sha256:7a4953883d6b261416801f473f8753998fdf56a546e4f4b82ed1925a2a61735b
+        - name: RELATED_IMAGE_OPENSEARCH_PLUGIN_ML_COMMON
+          value: cp.icr.io/cp/opencontent-ibm-opensearch-plugin-ml-common-2.19.1.0@sha256:2573091e9f751bdf397f47322f1ad549e0797bf918ece08c3b0061b4e39f09da
+        - name: OPENSEARCH_VERSION
+          value: 2.19.1
+        - name: OPENSEARCH_SECURITY_VERSION
+          value: 2.19.1.0
+        - name: OPENSEARCH_PLUGIN_ISM_VERSION
+          value: 2.19.1.0
+        - name: OPENSEARCH_PLUGIN_KNN_VERSION
+          value: 2.19.1.0
+        - name: OPENSEARCH_PLUGIN_ML_COMMON_VERSION
+          value: 2.19.1.0
+        - name: RELEASE_VERSION
+          value: 1.1.2494
+        image: icr.io/cpopen/opencontent-ibm-opensearch-operator@sha256:4f8663b52da01f4c6077578b27328f7976e3fbadda1adeb4b81c41f8ebfe1599
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        name: manager
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 16Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      imagePullSecrets:
+      - name: ibm-entitlement-key
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: ibm-opensearch-operator-controller-manager
+      terminationGracePeriodSeconds: 10

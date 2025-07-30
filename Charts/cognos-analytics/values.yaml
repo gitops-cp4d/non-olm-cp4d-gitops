@@ -1,0 +1,13 @@
+global:
+  operatorNamespace: ""     
+  instanceNamespace: ""                   
+  blockStorageClass: ""
+  fileStorageClass: ""
+  
+image:
+  repository: icr.io/cpopen/ibm-ca-operator
+  tag: "7.3.0"
+  digest: sha256:e665665133a853b391ecc7f585ad67d0289010cffd1e214eba41ed0c8a4c0f32
+
+
+

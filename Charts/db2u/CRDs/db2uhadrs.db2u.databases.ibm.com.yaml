@@ -1,0 +1,222 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/instance: db2u-operator
+    app.kubernetes.io/managed-by: Db2U-Team
+    app.kubernetes.io/name: db2u-operator
+    olm.managed: "true"
+    operators.coreos.com/db2u-operator.swhub-operator: ""
+  name: db2uhadrs.db2u.databases.ibm.com
+spec:
+  conversion:
+    strategy: None
+  group: db2u.databases.ibm.com
+  names:
+    kind: Db2uHadr
+    listKind: Db2uHadrList
+    plural: db2uhadrs
+    singular: db2uhadr
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - description: The Db2u deployment that HADR will be enabled with Primary role
+          jsonPath: .spec.primary.db2uCluster
+          name: HadrPrimary
+          type: string
+        - description: The Db2u deployment that HADR will be enabled with Standby role
+          jsonPath: .spec.standby.db2uCluster
+          name: HadrStandby
+          type: string
+        - description: The state of Db2u HADR setup
+          jsonPath: .status.state
+          name: State
+          type: string
+        - description: A timestamp representing the server time when this object was created
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          properties:
+            apiVersion:
+              type: string
+            kind:
+              type: string
+            metadata:
+              type: object
+            spec:
+              properties:
+                advancedOptions:
+                  additionalProperties:
+                    type: string
+                  type: object
+                dbConfig:
+                  properties:
+                    peerWindow:
+                      type: integer
+                    syncMode:
+                      type: string
+                    timeout:
+                      type: integer
+                  type: object
+                etcd:
+                  properties:
+                    name:
+                      type: string
+                    port:
+                      format: int32
+                      type: integer
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                features:
+                  properties:
+                    enableAutomaticClientReroute:
+                      type: boolean
+                    enableReadsOnStandby:
+                      type: boolean
+                    routeToPrimaryService:
+                      properties:
+                        enable:
+                          type: boolean
+                        service:
+                          properties:
+                            name:
+                              type: string
+                            ports:
+                              properties:
+                                port:
+                                  format: int32
+                                  type: integer
+                                sslPort:
+                                  format: int32
+                                  type: integer
+                              type: object
+                            type:
+                              type: string
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                      type: object
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                primary:
+                  properties:
+                    db2Instance:
+                      type: string
+                    db2uCluster:
+                      type: string
+                    db2uName:
+                      type: string
+                    namespace:
+                      type: string
+                    service:
+                      properties:
+                        name:
+                          type: string
+                        port:
+                          format: int32
+                          type: integer
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                  type: object
+                serviceName:
+                  type: string
+                standby:
+                  properties:
+                    db2Instance:
+                      type: string
+                    db2uCluster:
+                      type: string
+                    db2uName:
+                      type: string
+                    namespace:
+                      type: string
+                    service:
+                      properties:
+                        name:
+                          type: string
+                        port:
+                          format: int32
+                          type: integer
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                  type: object
+                version:
+                  default: 1.1.0
+                  type: string
+              type: object
+            status:
+              properties:
+                conditions:
+                  items:
+                    properties:
+                      lastTransitionTime:
+                        format: date-time
+                        type: string
+                      message:
+                        type: string
+                      reason:
+                        type: string
+                      status:
+                        type: string
+                      type:
+                        type: string
+                    required:
+                      - status
+                      - type
+                    type: object
+                  type: array
+                hadrSettings:
+                  properties:
+                    dbConfig:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    features:
+                      properties:
+                        enableAutomaticClientReroute:
+                          type: boolean
+                        enableReadsOnStandby:
+                          type: boolean
+                        routeToPrimaryService:
+                          properties:
+                            enable:
+                              type: boolean
+                            service:
+                              properties:
+                                name:
+                                  type: string
+                                ports:
+                                  properties:
+                                    port:
+                                      format: int32
+                                      type: integer
+                                    sslPort:
+                                      format: int32
+                                      type: integer
+                                  type: object
+                                type:
+                                  type: string
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                          type: object
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                    ports:
+                      additionalProperties:
+                        type: integer
+                      type: object
+                    services:
+                      additionalProperties:
+                        type: string
+                      type: object
+                  type: object
+                state:
+                  type: string
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

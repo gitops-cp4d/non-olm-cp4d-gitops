@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: openpages-clusterrolebinding
+subjects:
+  - kind: ServiceAccount
+    name: controller-manager
+    namespace: {{ .Values.global.operatorNamespace }}
+roleRef:
+  kind: ClusterRole
+  name: openpages-clusterrole
+  apiGroup: rbac.authorization.k8s.io

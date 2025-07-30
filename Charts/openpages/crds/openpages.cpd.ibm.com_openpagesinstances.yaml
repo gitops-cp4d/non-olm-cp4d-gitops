@@ -1,0 +1,143 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: openpagesinstances.openpages.cpd.ibm.com
+spec:
+  group: openpages.cpd.ibm.com
+  names:
+    kind: OpenPagesInstance
+    listKind: OpenPagesInstanceList
+    plural: openpagesinstances
+    singular: openpagesinstance
+  scope: Namespaced
+  versions:
+    - name: v1
+      schema:
+        openAPIV3Schema:
+          description: OpenPagesInstance is the Schema for the openpagesinstances API
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: Spec defines the desired state of OpenPagesInstance
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+              properties:
+                autoScaleConfig:
+                  type: boolean
+                  description: Enable or Disable Horizontal pod autoscaling
+                  default: false
+                enableInstanaMetricCollection:
+                  type: boolean
+                  description: Enable or Disable Instana metric collection support
+                  default: false
+                description:
+                  type: string
+                  description: Instance description
+                  default: ''
+                shutdown:
+                  type: string
+                  description: Flag to shutdown services
+                  enum: ["true", "false", "force"]
+                version:
+                  type: string
+                  description: Addon version
+                  default: "9.5.0"
+                zenControlPlaneNamespace:
+                  default: ""
+                  description: The Cloud Pak for Data control plane namespace
+                  type: string
+                scaleConfig:
+                  type: string
+                  description: Size of the instance - xsmall, small_mincpureq, small, medium, large
+                  enum: ["xsmall", "small_mincpureq", "small", "medium", "large"]
+                metadata:
+                  type: object
+                  properties:
+                    databaseType:
+                      type: string
+                      description: Database type
+                      enum: ["internal", "external"]
+                      default: internal
+                    database:
+                      type: string
+                      description: Database
+                      enum: ["Db2", "Oracle"]
+                      default: Db2
+                    dbSecretName:
+                      type: string
+                      description: Database information secret name
+                    appStorageClass:
+                      type: string
+                      description: Application file storage class
+                    dbDataStorageClass:
+                      type: string
+                      description: Data storage class
+                    dbMetaStorageClass:
+                      type: string
+                      description: Metadata storage class
+                    dbBackupStorageClass:
+                      type: string
+                      description: Backup storage class
+                    blockStorageClass:
+                      type: string
+                      description: Block storage class (required when other *StorageClass & storageVendor are not provided)
+                    fileStorageClass:
+                      type: string
+                      description: File storage class (required when other *StorageClass & storageVendor are not provided)
+                    storageVendor:
+                      type: string
+                      description: Storage Vendor (required when other *StorageClass are not provided)
+                    dedicatedDbNodes:
+                      type: boolean
+                      description: Use dedicated nodes
+                      default: false
+                    dbNodeLabelValue:
+                      type: string
+                      description: Node label (required when using dedicated nodes)
+                      default: ''
+                    scaleConfig:
+                      type: string
+                      description: Size of the instance - xsmall, small_mincpureq, small, medium, large
+                      enum: ["xsmall", "small_mincpureq", "small", "medium", "large"]
+                    enableIntegrationWithCognos:
+                      type: boolean
+                      description: Enable integration with Cognos Analytics
+                      default: false
+                    cognosNamespace:
+                      type: string
+                      description: Namespace where Cognos Analytics instance is installed
+                    enableWatsonxGov:
+                      default: false
+                      description: Enable WatsonX Governance
+                      type: boolean
+                    enableGlobalSearch:
+                      default: false
+                      description: Enable Global search
+                      type: boolean
+                  required: ["databaseType"]
+                license:
+                  properties:
+                    accept:
+                      type: boolean
+                      description: Accept license? https://ibm.biz/openpages-license
+                      enum:
+                        - true
+                  required: ["accept"]
+                  type: object
+              required: ["version", "metadata", "license"]
+            status:
+              description: Status defines the observed state of OpenPagesInstance
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

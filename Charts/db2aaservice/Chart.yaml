@@ -1,0 +1,6 @@
+apiVersion: v2
+name: db2aaservice-operator-helm
+description: Helm chart for Db2aaservice Operator
+type: application
+version: 0.1.0
+appVersion: "7.3.0"

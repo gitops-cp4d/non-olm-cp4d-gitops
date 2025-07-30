@@ -1,0 +1,122 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    olm.managed: "true"
+    operators.coreos.com/db2u-operator.swhub-operator: ""
+  name: db2ulogstreams.db2ulog.databases.ibm.com
+spec:
+  conversion:
+    strategy: None
+  group: db2ulog.databases.ibm.com
+  names:
+    kind: Db2uLogStream
+    listKind: Db2uLogStreamList
+    plural: db2ulogstreams
+    singular: db2ulogstream
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: Db2uLogStream is the Schema for the db2ulogstreams API
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: Db2uLogStreamSpec defines the desired state of Db2uLogStream
+              properties:
+                configurations:
+                  description: Configurations is a slice of Configurations
+                  items:
+                    description: Configuration represents the source of Db2uLogs and Format for propagation
+                    properties:
+                      connection:
+                        description: Connection name must match a valid connection
+                        type: string
+                      format:
+                        description: Format ie cadf
+                        enum:
+                          - cadf
+                        type: string
+                      type:
+                        description: Type ie audit
+                        enum:
+                          - audit
+                        type: string
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                  type: array
+                connections:
+                  additionalProperties:
+                    description: Connection represents an endpoint and credentials to forward logs
+                    properties:
+                      authType:
+                        description: AuthType methods for authenticating against an endpoint
+                        type: string
+                      credentials:
+                        description: Credentials secret containing the credentials for authorization
+                        type: string
+                      endpoint:
+                        type: string
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                  description: Connections is a map of connection name to Connection
+                  type: object
+                resources:
+                  description: Resources are ResourceRequirements for the Db2uLogStream
+                  properties:
+                    limits:
+                      additionalProperties:
+                        anyOf:
+                          - type: integer
+                          - type: string
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                      description: |-
+                        Limits describes the maximum amount of compute resources allowed.
+                        More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+                      type: object
+                    requests:
+                      additionalProperties:
+                        anyOf:
+                          - type: integer
+                          - type: string
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                      description: |-
+                        Requests describes the minimum amount of compute resources required.
+                        If Requests is omitted for a container, it defaults to Limits if that is explicitly specified,
+                        otherwise to an implementation-defined value.
+                        More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+                      type: object
+                  type: object
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+            status:
+              description: Db2uLogStreamStatus defines the observed state of Db2uLogStream
+              properties:
+                state:
+                  description: Captures state of CR
+                  type: string
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

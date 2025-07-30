@@ -1,0 +1,5 @@
+resources:
+  - 1-foundation
+  - 2-cluster-scope
+  - 3-namespace-scope
+  - 4-cartridges/planning-analytics 

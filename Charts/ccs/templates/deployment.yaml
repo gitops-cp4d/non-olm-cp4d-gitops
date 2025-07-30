@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibm-cpd-ccs-operator
+  namespace: {{ .Values.global.operatorNS }}
+  labels:
+    control-plane: ibm-cpd-ccs-operator
+    app.kubernetes.io/instance: ibm-cpd-ccs-operator
+    app.kubernetes.io/managed-by: ibm-cpd-ccs-operator
+    app.kubernetes.io/name: ibm-cpd-ccs-operator
+    icpdsupport/app: operator
+    icpdsupport/addOnId: ccs
+    icpdsupport/module: ibm-cpd-ccs-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: ibm-cpd-ccs-operator
+  template:
+    metadata:
+      annotations:
+        productID: eb9998dcc5d24e3eb5b6fb488f750fe2
+        productMetric: FREE
+        productName: IBM Cloud Pak for Data Common Core Services
+        productVersion: 11.0.0
+        cloudpakName: IBM Cloud Pak for Data
+        cloudpakId: eb9998dcc5d24e3eb5b6fb488f750fe2
+      labels:
+        control-plane: ibm-cpd-ccs-operator
+        app.kubernetes.io/instance: ibm-cpd-ccs-operator
+        app.kubernetes.io/managed-by: ibm-cpd-ccs-operator
+        app.kubernetes.io/name: ibm-cpd-ccs-operator
+        intent: projected
+        icpdsupport/app: operator
+        icpdsupport/addOnId: ccs
+        icpdsupport/module: ibm-cpd-ccs-operator
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+                      - ppc64le
+                      - s390x
+      containers:
+        - name: manager
+          args:
+            - "--zap-log-level"
+            - "error"
+            - "--max-concurrent-reconciles"
+            - "1"
+            - "--reconcile-period"
+            - "0s"
+          image: "{{ .Values.image.repository }}@{{ .Values.image.digest }}"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 6789
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 6789
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          securityContext:
+            privileged: false
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
+          env:
+            - name: ANSIBLE_CALLBACKS_ENABLED
+              value: "profile_roles, profile_tasks"
+            - name: ANSIBLE_STDOUT_CALLBACK
+              value: yaml
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                  key: namespaces
+                  name: namespace-scope
+                  optional: true
+            - name: OPERATOR_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+              ephemeral-storage: 1Gi
+            limits:
+              cpu: 2
+              memory: 1536Mi
+              ephemeral-storage: 1Gi
+      serviceAccountName: ibm-cpd-ccs-operator-serviceaccount
+      terminationGracePeriodSeconds: 10

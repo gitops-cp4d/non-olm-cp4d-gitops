@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: db2u-day2-ops-controller-manager
+  namespace: {{ .Values.global.operatorNamespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: db2u-day2-ops-controller-manager
+subjects:
+- kind: ServiceAccount
+  name: db2u-day2-ops-controller-manager
+  namespace: {{ .Values.global.operatorNamespace }}

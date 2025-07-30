@@ -1,0 +1,6 @@
+apiVersion: v2
+name: openpages-operator
+description: IBM OpenPages Operator (non-OLM) helm chart
+type: application
+version: 0.1.0
+appVersion: "9.5.0"

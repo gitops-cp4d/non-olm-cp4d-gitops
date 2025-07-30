@@ -1,0 +1,168 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    cloudpakId: 5c92123b253a492780e6c6d4fe151d57
+    cloudpakName: IBM Cognos Analytics Extension for IBM Cloud Pak for Data
+    productID: 5c92123b253a492780e6c6d4fe151d57
+    productMetric: FREE
+    productName: IBM Cognos Analytics Extension for IBM Cloud Pak for Data
+    productVersion: 12.1.0
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/instance: ibm-ca-operator
+    app.kubernetes.io/managed-by: ibm-ca-operator
+    app.kubernetes.io/name: ibm-ca-operator
+    icpdsupport/addOnId: cognos-analytics-app
+    icpdsupport/app: cognos-analytics
+    icpdsupport/ignore-on-nd-backup: "false"
+    icpdsupport/module: caservice
+  name: caservices.ca.cpd.ibm.com
+spec:
+  group: ca.cpd.ibm.com
+  names:
+    kind: CAService
+    listKind: CAServiceList
+    plural: caservices
+    singular: caservice
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: The percentage of completion towards the current operation
+      jsonPath: .status.progress
+      name: progress
+      type: string
+    - description: A general description of what is being executed
+      jsonPath: .status.progressMessage
+      name: progressMessage
+      type: string
+    - description: The status of CAService
+      jsonPath: .status.caAddonStatus
+      name: status
+      type: string
+    - description: A list of messages with a maximum length of 3 entries (with the
+        most recent as the first item)
+      jsonPath: .status.reconcileHistory
+      name: reconcileHistory
+      type: string
+    - description: The age of CAService
+      jsonPath: .metadata.creationTimestamp
+      name: age
+      type: date
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: CAService is the Schema for the caservices API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec defines the desired state of CAService
+            properties:
+              blockStorageClass:
+                description: Storage Class Name for block storage (RWO)
+                type: string
+              enableInstanaMetricCollection:
+                default: false
+                description: Support Instana Metric Collection
+                type: boolean
+              fileStorageClass:
+                description: Storage Class Name for file storage (RWX)
+                type: string
+              hotfix_digests:
+                description: Hotfix image digest overrides for CAService
+                properties:
+                  ca_cpd_addon_translation:
+                    description: Override image digest for the CA add-on translation
+                    type: string
+                  ibm_cognos_addon_sp:
+                    description: Override image digest for the CA add-on service provider
+                    type: string
+                type: object
+              installCCS:
+                description: Optional flag to control whether to install the CCS dependency
+                enum:
+                - false
+                - true
+                type: boolean
+              license:
+                description: License agreement for CAService
+                properties:
+                  accept:
+                    enum:
+                    - false
+                    - true
+                    type: boolean
+                required:
+                - accept
+                type: object
+              namespace:
+                description: Namespace where Cognos Analytics service will be installed
+                  (deprecated)
+                type: string
+              shutdown:
+                description: Controls stop / start of service
+                enum:
+                - "false"
+                - "true"
+                - force
+                type: string
+              storage_class:
+                description: Storage Class Name (deprecated)
+                type: string
+              storageClass:
+                description: Storage Class Name
+                type: string
+              version:
+                description: Version of the CAService
+                type: string
+            required:
+            - version
+            - license
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            description: Status defines the observed state of CAService
+            properties:
+              versions:
+                properties:
+                  available:
+                    properties:
+                      versions:
+                        items:
+                          properties:
+                            name:
+                              type: string
+                          required:
+                          - name
+                          type: object
+                        type: array
+                    type: object
+                  reconciled:
+                    type: string
+                required:
+                - reconciled
+                type: object
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db2u-operator-manager
+  namespace: {{ .Values.global.operatorNamespace }}
+  labels:
+    control-plane: db2u-operator-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: db2u-operator-manager
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: runtime/default
+      creationTimestamp: null
+      labels:
+        control-plane: db2u-operator-manager
+        icpdsupport/addOnId: operator
+        icpdsupport/app: operator
+        icpdsupport/module: db2uoperator
+        intent: projected
+    spec:
+      containers:
+        - resources:
+            limits:
+              cpu: '1'
+              memory: 1000Mi
+            requests:
+              cpu: 500m
+              memory: 500Mi
+          readinessProbe:
+            failureThreshold: 5
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+          name: manager
+          command:
+            - /manager
+          livenessProbe:
+            failureThreshold: 5
+            initialDelaySeconds: 30
+            periodSeconds: 45
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+          env:
+            - name: CDCP_GROUP
+              value: db2u.databases.ibm.com
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                  key: namespaces
+                  name: namespace-scope
+                  optional: true
+            - name: META_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: db2u-operator
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+          ports:
+            - containerPort: 9443
+              protocol: TCP
+          image: 'icr.io/cpopen/db2u-operator@sha256:5dbcc996bd77fee3c3e71b2cb92f2d19b28add2404e2856f8dcadd5f82567992'
+          args:
+            - '--enable-leader-election'
+            - '--zap-log-level=debug'
+            - '--zap-encoder=console'
+            - '--registry=cp.icr.io/cp'
+            - '--ce-registry=icr.io/db2u'
+            - '--operand-image-registry=icr.io/db2u'
+      securityContext:
+        runAsNonRoot: true
+      serviceAccountName: db2u-operator
+      terminationGracePeriodSeconds: 10

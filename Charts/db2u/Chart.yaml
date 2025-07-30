@@ -1,0 +1,6 @@
+apiVersion: v2
+name: db2u-operator-helm
+description: Helm chart for db2u Operator
+type: application
+version: 0.1.0
+appVersion: "7.3.0"

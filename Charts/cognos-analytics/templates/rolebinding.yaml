@@ -1,0 +1,17 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ibm-ca-operator-manager-rolebinding
+  namespace: {{ .Values.global.operatorNS }}
+  labels:
+    app.kubernetes.io/instance: ibm-ca-operator
+    app.kubernetes.io/managed-by: ibm-ca-operator
+    app.kubernetes.io/name: ibm-ca-operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: ibm-ca-operator-manager-role
+subjects:
+  - kind: ServiceAccount
+    name: ibm-ca-operator-manager-serviceaccount
+    namespace: {{ .Values.global.operatorNS }}

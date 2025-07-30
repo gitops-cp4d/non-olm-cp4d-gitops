@@ -1,0 +1,183 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: {{ .Values.global.operatorNS }}
+  name: ibm-ca-operator-manager-role
+  labels:
+    app.kubernetes.io/instance: ibm-ca-operator
+    app.kubernetes.io/managed-by: ibm-ca-operator
+    app.kubernetes.io/name: ibm-ca-operator
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - ""
+      - autoscaling
+    resources:
+      - secrets
+      - pods
+      - pods/exec
+      - pods/log
+      - persistentvolumeclaims
+      - configmaps
+      - horizontalpodautoscalers
+      - deployments
+      - services
+      - services/finalizers
+      - serviceaccounts
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - get
+  - apiGroups:
+      - apps
+      - batch
+    resources:
+      - deployments
+      - daemonsets
+      - replicasets
+      - statefulsets
+      - jobs
+      - cronjobs
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - create
+      - get
+      - list
+      - update
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - roles
+      - rolebindings
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ca.cpd.ibm.com
+    resources:
+      - caservices
+      - caservices/status
+      - caservices/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ca.cpd.ibm.com
+    resources:
+      - caserviceinstances
+      - caserviceinstances/status
+      - caserviceinstances/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - zen.cpd.ibm.com
+    resources:
+      - zenservices
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - zen.cpd.ibm.com
+    resources:
+      - zenextension
+      - zenextensions
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - zen.cpd.ibm.com
+    resources:
+      - zenextension/status
+      - zenextensions/status
+    verbs:
+      - get
+  - apiGroups:
+      - ccs.cpd.ibm.com
+    resources:
+      - ccs
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - operator.ibm.com
+    resources:
+      - operandrequests
+      - operandregistries
+      - operandconfigs
+      - operandbindinfos
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch

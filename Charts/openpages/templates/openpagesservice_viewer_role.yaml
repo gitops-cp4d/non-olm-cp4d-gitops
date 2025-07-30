@@ -1,0 +1,20 @@
+# permissions for end users to view openpagesservices.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: openpagesservice-viewer-role
+rules:
+- apiGroups:
+  - openpages.cpd.ibm.com
+  resources:
+  - openpagesservices
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - openpages.cpd.ibm.com
+  resources:
+  - openpagesservices/status
+  verbs:
+  - get

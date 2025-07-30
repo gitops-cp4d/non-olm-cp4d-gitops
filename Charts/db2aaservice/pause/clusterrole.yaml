@@ -1,0 +1,376 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: db2u-cp4d-operator-clusterrole
+rules:
+  ##
+  ## Base operator rules
+  ##
+- apiGroups:
+  - ""
+  - apps
+  - autoscaling
+  - batch
+  - extensions
+  - policy
+  - authorization.openshift.io
+  - metrics.k8s.io
+  - networking.k8s.io
+  - project.openshift.io
+  - rbac.authorization.k8s.io
+  - route.openshift.io
+  resources:
+  - configmaps
+  - cronjob
+  - cronjobs
+  - deployments
+  - deployments/scale
+  - daemonsets
+  - endpoints
+  - events
+  - horizontalpodautoscalers
+  - ingresses
+  - jobs
+  - jobs/status
+  - namespaces
+  - networkpolicies
+  - persistentvolumeclaims
+  - pods
+  - pods/eviction
+  - pods/exec
+  - pods/log
+  - pods/portforward
+  - pods/status
+  - poddisruptionbudgets
+  - projects
+  - replicasets
+  - replicationcontrollers
+  - resourcequotas
+  - resourcequotas/status
+  - roles
+  - rolebindings
+  - routes
+  - routes/custom-host
+  - secrets
+  - serviceaccounts
+  - services
+  - services/finalizers
+  - statefulsets
+  - verticalpodautoscalers
+  verbs:
+  - apply
+  - create
+  - get
+  - delete
+  - watch
+  - update
+  - edit
+  - exec
+  - list
+  - patch
+  - deletecollection
+- apiGroups:
+  - cpd.ibm.com
+  resources:
+  - cpdinstalls
+  - cpdinstalls/spec
+  - cpdinstalls/status
+  verbs:
+  - apply
+  - create
+  - delete
+  - edit
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - build.openshift.io
+  resources:
+  - buildconfigs
+  - buildconfigs/instantiate
+  - buildconfigs/instantiatebinary
+  - buildconfigs/webhooks
+  - buildlogs
+  - builds
+  - builds/clone
+  - builds/details
+  - builds/log
+  verbs:
+  - create
+  - delete
+  - list
+  - watch
+  - get
+  - patch
+  - update
+- apiGroups:
+  - image.openshift.io
+  resources:
+  - imagestreams
+  - imagestreams/layers
+  - imagestreams/secrets
+  - imagestreams/status
+  - imagestreamimages
+  - imagestreamimports
+  - imagestreammappings
+  - imagestreamtags
+  verbs:
+  - create
+  - delete
+  - list
+  - watch
+  - get
+  - patch
+  - update
+- apiGroups:
+  - apps
+  resourceNames:
+  - cpd-zen-operator
+  resources:
+  - deployments/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+- apiGroups:
+  - apps
+  resources:
+  - replicasets
+  - deployments
+  verbs:
+  - get
+- apiGroups:
+  - zen.cpd.ibm.com
+  resources:
+  - zenextensions
+  - zenservices
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - zen.cpd.ibm.com
+  resources:
+  - zenextensions/status
+  - zenservices/status
+  verbs:
+  - get
+- apiGroups:
+  - operator.ibm.com
+  resources:
+  - commonservices
+  - operandrequests
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - configmaps
+  - deployments
+  - daemonsets
+  - replicasets
+  - statefulsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterrole
+  - clusterroles
+  - clusterrolebinding
+  - clusterrolebindings
+  verbs:
+  - create
+  - delete
+  - list
+  - get
+  - watch
+  - update
+  - patch
+- apiGroups:
+  - db2u.databases.ibm.com
+  resources:
+  - bigsqls
+  - db2uclusters
+  - db2uengines
+  - db2uhadrs
+  - db2uhelmmigrations
+  - db2uinstances
+  - formationlocks
+  - formations
+  verbs:
+  - create
+  - delete
+  - list
+  - get
+  - watch
+  - update
+  - patch
+- apiGroups:
+  - certmanager.k8s.io
+  resources:
+  - issuers
+  - issuers/status
+  - issuers/finalizers
+  - certificates
+  - certificates/status
+  - certificates/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - issuers
+  - issuers/status
+  - issuers/finalizers
+  - certificates
+  - certificates/status
+  - certificates/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  - apps
+  - authorization.openshift.io
+  - autoscaling
+  - batch
+  - extensions
+  - metrics.k8s.io
+  - networking.k8s.io
+  - policy
+  - rbac.authorization.k8s.io
+  - route.openshift.io
+  resources:
+  - statefulsets/scale
+  verbs:
+  - create
+  - get
+  - delete
+  - watch
+  - update
+  - list
+  - patch
+  - deletecollection
+- apiGroups:
+  - ibm.com
+  resources:
+  - resourceplans
+  - resourcematches
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
+  - create
+  - delete
+  - deletecollection
+- apiGroups:
+  - oidc.security.ibm.com
+  resources:
+  - client
+  - clients
+  verbs:
+  - create
+  - get
+  - list
+  - patch
+  - update
+  - watch
+  - delete
+##
+## Rules for databases.cpd.ibm.com/v1, Kind: Db2aaserviceService
+##
+- apiGroups:
+  - databases.cpd.ibm.com
+  resources:
+  - db2whservices
+  - db2whservices/status
+  - db2whservices/finalizers
+  - db2oltpservices
+  - db2oltpservices/status
+  - db2oltpservices/finalizers
+  - db2aaserviceservices
+  - db2aaserviceservices/status
+  - db2aaserviceservices/finalizers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - databases.cpd.ibm.com
+  resources:
+  - "db2aaserviceservices"
+  - "db2aaserviceservices/status"
+  - "db2aaserviceservices/finalizers"
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+    - configmaps
+  verbs:
+    - create
+    - get
+    - delete
+    - watch
+    - update
+    - list
+    - patch
+    - deletecollection
+- apiGroups:
+  - apps
+  resources:
+    - deployments
+    - deployments/scale
+  verbs:
+    - create
+    - get
+    - delete
+    - watch
+    - update
+    - list
+    - patch
+    - deletecollection
+  
+# +kubebuilder:scaffold:rules

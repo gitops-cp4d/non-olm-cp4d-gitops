@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgresql-cluster-{{ .Values.global.appSuffix }}
+  namespace: {{ .Values.global.argocdNS }}
+spec:
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
+  destination:
+    name: ''
+    namespace: default
+    server: https://kubernetes.default.svc
+  source:
+    path: ''
+    repoURL: {{ .Values.global.helmRepoURL }}
+    targetRevision: {{ index .Values.apps "postgresql-cluster" "version" }}
+    chart: {{ index .Values.apps "postgresql-cluster" "chart" }}
+    helm:
+      valuesObject:
+        global:
+          operatorNamespace: {{ .Values.global.operatorNS }}
+  project: default

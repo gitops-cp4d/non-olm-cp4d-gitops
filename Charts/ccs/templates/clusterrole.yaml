@@ -1,0 +1,344 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ibm-cpd-ccs-operator-role
+rules:
+  - apiGroups:
+      - serving.kserve.io
+    resources:
+      - servingruntimes
+      - inferenceservices
+    verbs:
+      - create
+      - delete
+      - deletecollection
+      - list
+      - watch
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - ibm.com
+    resources:
+      - paralleljobs
+    verbs:
+      - create
+      - delete
+      - deletecollection
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - kubeflow.org
+    resources:
+      - pytorchjobs
+    verbs:
+      - create
+      - delete
+      - deletecollection
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - zen.cpd.ibm.com
+    resources:
+      - zenextensions/status
+    verbs:
+      - get
+  - apiGroups:
+      - zen.cpd.ibm.com
+    resources:
+      - zenextension
+      - zenextensions
+    verbs:
+      - create
+      - delete
+      - list
+      - watch
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - operator.ibm.com
+    resources:
+      - operandrequests
+      - operandregistries
+      - operandconfigs
+      - operandbindinfos
+    verbs:
+      - create
+      - get
+      - list
+      - patch
+      - update
+      - watch
+      - delete
+      - use
+  - apiGroups:
+      - ""
+      - batch
+      - extensions
+      - apps
+      - policy
+      - rbac.authorization.k8s.io
+      - autoscaling
+      - route.openshift.io
+      - authorization.openshift.io
+      - networking.k8s.io
+      - metrics.k8s.io
+      - project.openshift.io
+    resources:
+      - pods
+      - pods/log
+      - poddisruptionbudgets
+      - secrets
+      - jobs
+      - configmaps
+      - deployments
+      - deployments/scale
+      - deployments/finalizers
+      - daemonsets
+      - projects
+      - statefulsets
+      - statefulsets/scale
+      - replicasets
+      - services
+      - services/finalizers
+      - persistentvolumeclaims
+      - cronjobs
+      - pods/exec
+      - pods/portforward
+      - serviceaccounts
+      - namespaces
+      - roles
+      - rolebindings
+      - horizontalpodautoscalers
+      - routes
+      - routes/custom-host
+      - ingresses
+      - endpoints
+      - cronjob
+      - networkpolicies
+      - events
+      - jobs/status
+      - pods/status
+      - resourcequotas
+      - resourcequotas/status
+    verbs:
+      - create
+      - get
+      - delete
+      - watch
+      - update
+      - list
+      - patch
+      - deletecollection
+  - apiGroups:
+      - cpd.ibm.com
+    resources:
+      - cpdinstalls
+      - cpdinstalls/spec
+      - cpdinstalls/status
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - runtimes.ibm.com
+    resources:
+      - runtimeassemblies
+      - runtimeassemblies/spec
+      - runtimeassemblies/status
+    verbs:
+      - create
+      - delete
+      - deletecollection
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - build.openshift.io
+    resources:
+      - buildconfigs
+      - buildconfigs/instantiate
+      - buildconfigs/instantiatebinary
+      - buildconfigs/webhooks
+      - buildlogs
+      - builds
+      - builds/clone
+      - builds/details
+      - builds/log
+    verbs:
+      - create
+      - delete
+      - list
+      - watch
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - image.openshift.io
+    resources:
+      - imagestreams
+      - imagestreams/layers
+      - imagestreams/secrets
+      - imagestreams/status
+      - imagestreamimages
+      - imagestreamimports
+      - imagestreammappings
+      - imagestreamtags
+    verbs:
+      - create
+      - delete
+      - list
+      - watch
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+  - apiGroups:
+      - ibmcpcs.ibm.com
+    resources:
+      - secretshares
+      - secretshares/spec
+      - secretshares/status
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - replicasets
+      - deployments
+    verbs:
+      - get
+  - apiGroups:
+      - ccs.cpd.ibm.com
+    resources:
+      - ccs
+      - ccs/spec
+      - ccs/status
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - postgresql.k8s.enterprisedb.io
+    resources:
+      - clusters
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - zen.cpd.ibm.com
+    resources:
+      - zenservices
+      - zenservices/spec
+      - zenservices/status
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - certmanager.k8s.io
+    resources:
+      - issuers
+      - issuers/status
+      - issuers/finalizers
+      - certificates
+      - certificates/status
+      - certificates/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - cert-manager.io
+    resources:
+      - issuers
+      - issuers/status
+      - issuers/finalizers
+      - certificates
+      - certificates/status
+      - certificates/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - elasticsearch.opencontent.ibm.com
+    resources:
+      - elasticsearchclusters
+      - elasticsearchclusters/spec
+      - elasticsearchclusters/status
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - opensearch.cloudpackopen.ibm.com
+    resources:
+      - clusters
+      - clusters/status
+      - clusters/finalizers
+      - nodepools
+      - nodepools/status
+      - nodepools/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - create
+      - delete
+      - get
+      - update

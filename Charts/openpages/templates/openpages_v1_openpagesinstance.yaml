@@ -1,0 +1,42 @@
+apiVersion: openpages.cpd.ibm.com/v1
+kind: OpenPagesInstance
+metadata:
+  name: openpagesinstance1
+  namespace: {{ .Values.global.instanceNamespace }}
+  annotations:
+    "ansible.sdk.operatorframework.io/verbosity": "3"
+  labels:
+    app.kubernetes.io/name: openpages
+    app.kubernetes.io/instance: openpagesinstance1
+    app.kubernetes.io/version: "9.5.0"
+    app.kubernetes.io/managed-by: "ibm-cpd-openpages-operator"
+spec:
+  zenControlPlaneNamespace: {{ .Values.global.instanceNamespace }}
+  description: "OpenPages instance"
+  version: "9.5.0"
+  autoScaleConfig: false
+  enableInstanaMetricCollection: false
+  shutdown: "false"
+  scaleConfig: xsmall
+  metadata:
+    enableWatsonxGov: false
+    database: Db2
+    databaseType: internal
+    dbSecretName: ""
+    # Advance storage classes takes the highest precedence
+    # appStorageClass: portworx-shared-gp3
+    # dbBackupStorageClass: portworx-db2-rwx-sc
+    # dbDataStorageClass: portworx-db2-rwo-sc
+    # dbMetaStorageClass: portworx-db2-rwx-sc
+    # Standard storage classes takes second-highest precedence
+    blockStorageClass: {{ .Values.global.blockStorageClass }}
+    fileStorageClass: {{ .Values.global.fileStorageClass }}
+    # storageVendor takes least precedence
+    storageVendor: ""
+    dedicatedDbNodes: false
+    dbNodeLabelValue: ""
+    enableIntegrationWithCognos: false
+    cognosNamespace: ""
+    enableGlobalSearch: false
+  license:
+    accept: true

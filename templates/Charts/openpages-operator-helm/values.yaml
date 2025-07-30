@@ -1,0 +1,10 @@
+global:
+  operatorNamespace: ""     
+  instanceNamespace: ""                   
+  blockStorageClass: ""
+  fileStorageClass: ""
+
+image:
+  repository: icr.io/cpopen/ibm-cpd-openpages-operator
+  tag: 9.1.0.1-82
+  digest: sha256:272c6f6c671f6276b6e781459612972206dacbcdc73fb12e9e81d60dd5776d70

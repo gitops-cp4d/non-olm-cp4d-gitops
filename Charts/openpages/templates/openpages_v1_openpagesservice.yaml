@@ -1,0 +1,16 @@
+apiVersion: openpages.cpd.ibm.com/v1
+kind: OpenPagesService
+metadata:
+  name: openpagesservice-cr
+  namespace: {{ .Values.global.instanceNamespace }}
+  labels:
+    app.kubernetes.io/name: openpages
+    app.kubernetes.io/instance: "openpagesservice-cr"
+    app.kubernetes.io/version: "9.5.0"
+    app.kubernetes.io/managed-by: "ibm-cpd-openpages-operator"
+spec:
+  version: "9.5.0"
+  license:
+    accept: true
+  shutdown: "false"
+  autoScaleConfig: false

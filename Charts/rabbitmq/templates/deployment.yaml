@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-operator
+  namespace: {{ .Values.global.operatorNamespace }}
+  labels:
+    control-plane: controller-manager
+    app.kubernetes.io/instance: {{ .Release.Name }}-operator
+    app.kubernetes.io/managed-by: {{ .Release.Name }}-operator
+    app.kubernetes.io/name: {{ .Release.Name }}-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: controller-manager
+      name: {{ .Release.Name }}-operator
+      app.kubernetes.io/instance: {{ .Release.Name }}-operator
+      app.kubernetes.io/managed-by: {{ .Release.Name }}-operator
+      app.kubernetes.io/name: {{ .Release.Name }}-operator
+  template:
+    metadata:
+      labels:
+        control-plane: controller-manager
+        name: {{ .Release.Name }}-operator
+        app.kubernetes.io/instance: {{ .Release.Name }}-operator
+        app.kubernetes.io/managed-by: {{ .Release.Name }}-operator
+        app.kubernetes.io/name: {{ .Release.Name }}-operator
+        intent: projected
+      annotations:
+        productName: "Cloud Pak Open"
+        productID: "3be23cc87d094c5f8bd6d73fe149248c"
+        productMetric: FREE
+        productChargedContainers: "All"
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                  - amd64
+                  - s390x
+      hostNetwork: false
+      hostPID: false
+      hostIPC: false
+      securityContext:
+        runAsNonRoot: true
+      # imagePullSecrets:
+      # - name: "operator-secret"
+      serviceAccountName: {{ .Release.Name }}-operator
+      containers:
+        - name: manager
+          image: "{{ .Values.image.repository }}@{{ .Values.image.digest }}"
+          args:
+            - "--leader-elect"
+            - "--leader-election-id=ibm-rabbitmq-operator"
+            - "--health-probe-bind-address=:8081"
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: false
+            readOnlyRootFilesystem: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+          resources:
+            limits:
+              ephemeral-storage: 2Gi
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              ephemeral-storage: 100Mi
+              cpu: "0.5"
+              memory: 1Gi
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                  name: namespace-scope
+                  key: namespaces
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+      terminationGracePeriodSeconds: 10

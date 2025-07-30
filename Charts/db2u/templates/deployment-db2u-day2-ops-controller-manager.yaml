@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db2u-day2-ops-controller-manager
+  namespace: {{ .Values.global.operatorNamespace }}
+  labels:
+    control-plane: controller-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: controller-manager
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+        seccomp.security.alpha.kubernetes.io/pod: runtime/default
+      creationTimestamp: null
+      labels:
+        control-plane: controller-manager
+        icpdsupport/addOnId: operator
+        icpdsupport/app: operator
+        icpdsupport/module: db2uday2operator
+        intent: projected
+    spec:
+      containers:
+        - resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          name: manager
+          command:
+            - /manager
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          env:
+            - name: META_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                  key: namespaces
+                  name: namespace-scope
+                  optional: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+          image: 'icr.io/cpopen/db2u-day2-operator@sha256:80cffe03b342e83252380aeb4de97777fbb6f5a06648f29702a22a926f03dbf7'
+          args:
+            - '--leader-elect'
+            - '--zap-log-level=debug'
+            - '--zap-encoder=console'
+      securityContext:
+        runAsNonRoot: true
+      serviceAccountName: db2u-day2-ops-controller-manager
+      terminationGracePeriodSeconds: 10

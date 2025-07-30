@@ -1,0 +1,14 @@
+apiVersion: ca.cpd.ibm.com/v1
+kind:  CAService
+metadata:
+  name: ca-addon-cr
+  namespace: {{ .Values.global.instanceNS }}
+spec:
+  license:
+    accept: true
+  fileStorageClass: {{ .Values.global.fileStorageClass }}
+  blockStorageClass: {{ .Values.global.blockStorageClass }}
+  # storageClass: {{ .Values.global.fileStorageClass }}
+  # storageVendor: ocs
+  version: 28.0.0
+

@@ -1,0 +1,333 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    cloudpakId: 5c92123b253a492780e6c6d4fe151d57
+    cloudpakName: IBM Cognos Analytics Extension for IBM Cloud Pak for Data
+    productID: 5c92123b253a492780e6c6d4fe151d57
+    productMetric: FREE
+    productName: IBM Cognos Analytics Extension for IBM Cloud Pak for Data
+    productVersion: 12.1.0
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/instance: ibm-ca-operator
+    app.kubernetes.io/managed-by: ibm-ca-operator
+    app.kubernetes.io/name: ibm-ca-operator
+    icpdsupport/addOnId: cognos-analytics-app
+    icpdsupport/app: cognos-analytics
+    icpdsupport/ignore-on-nd-backup: "false"
+    icpdsupport/module: caservice
+  name: caserviceinstances.ca.cpd.ibm.com
+spec:
+  group: ca.cpd.ibm.com
+  names:
+    kind: CAServiceInstance
+    listKind: CAServiceInstanceList
+    plural: caserviceinstances
+    singular: caserviceinstance
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: The percentage of completion towards the current operation
+      jsonPath: .status.progress
+      name: progress
+      type: string
+    - description: A general description of what is being executed
+      jsonPath: .status.progressMessage
+      name: progressMessage
+      type: string
+    - description: The status of CAServiceInstance
+      jsonPath: .status.caStatus
+      name: status
+      type: string
+    - description: A list of messages with a maximum length of 3 entries (with the
+        most recent as the first item)
+      jsonPath: .status.reconcileHistory
+      name: reconcileHistory
+      type: string
+    - description: The age of CAServiceInstance
+      jsonPath: .metadata.creationTimestamp
+      name: age
+      type: date
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: CAServiceInstance is the Schema for the caserviceinstances API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            properties:
+              name:
+                type: string
+            type: object
+          spec:
+            description: Spec defines the desired state of CAServiceInstance
+            properties:
+              audit:
+                properties:
+                  database_cert_alias:
+                    type: string
+                  database_host:
+                    type: string
+                  database_name:
+                    type: string
+                  database_oracle_net_8:
+                    type: string
+                  database_port:
+                    type: string
+                  database_property:
+                    description: Optional Advanced Property added to JDBC Connection
+                    type: string
+                  database_provider:
+                    type: string
+                  database_tls_enabled:
+                    type: string
+                required:
+                - database_tls_enabled
+                - database_provider
+                - database_host
+                - database_port
+                - database_name
+                type: object
+              autoScaleConfig:
+                description: CA instance will enable autoscaling for services that
+                  support it.
+                enum:
+                - "false"
+                - "true"
+                type: string
+              blockStorageClass:
+                description: Storage Class Name for block storage (RWO)
+                type: string
+              cogConfigProperties:
+                description: Configuration required for Cognos.
+                properties:
+                  cognosServerPersistTimeoutSeconds:
+                    description: persist.timeout integer value in seconds to fix CCL-BIT-0006
+                      timeout error
+                    type: string
+                  connectionLifetime:
+                    description: Connection Lifetime property for ca cpd pods.
+                    type: string
+                type: object
+              cogInactivityTimeout:
+                description: Inactivity timeout that defaults to token_expiry_time
+                  in productconfigmap. Unit is always in hours or decimal e.g. 0.25
+                  is 15 minutes.
+                type: string
+              cogPromptAutoResize:
+                default: "false"
+                description: SYSTEMPROPERTY_CSEARCH_AUTO_RESIZE_RESULT_LIST in prompting.js
+                enum:
+                - "false"
+                - "true"
+                type: string
+              cogSaveToFilesystemPVCName:
+                description: Name of PVC added that is used to save report output
+                  to filesystem.
+                type: string
+              cogServerTimeZoneId:
+                description: CA instance will use this time zone id instead of system
+                  default.
+                type: string
+              cp4d_web_url:
+                description: DEPRECATED
+                type: string
+              cp4d_web_url_base:
+                description: DEPRECATED
+                type: string
+              cryptoConformance:
+                description: CA Crypto Standard Conformance
+                enum:
+                - FIPS_140
+                type: string
+              cs:
+                description: content store information
+                properties:
+                  database_cert_alias:
+                    description: database cert alias for content store
+                    type: string
+                  database_host:
+                    description: host of the content store
+                    type: string
+                  database_name:
+                    description: content store database name
+                    type: string
+                  database_oracle_net_8:
+                    description: special field for oracle content store
+                    type: string
+                  database_port:
+                    description: port of the content store
+                    type: string
+                  database_property:
+                    description: Optional Advanced Property added to JDBC Connection
+                    type: string
+                  database_provider:
+                    description: database provider of the content store
+                    type: string
+                  database_tls_enabled:
+                    type: string
+                required:
+                - database_tls_enabled
+                - database_provider
+                - database_host
+                - database_port
+                - database_name
+                type: object
+              enableAuditLogging:
+                description: Optional flag to control whether to enable CPD auditing
+                  logging, default is true
+                enum:
+                - false
+                - true
+                type: boolean
+              enableInstanaMetricCollection:
+                default: false
+                description: Support Instana Metric Collection
+                type: boolean
+              fileStorageClass:
+                description: Storage Class Name for file storage (RWX)
+                type: string
+              hotfix_digests:
+                description: Hotfix image digest overrides for CAServiceInstance
+                properties:
+                  artifacts:
+                    description: Override image digest for the CA Artifacts API
+                    type: string
+                  ca_cpd_cm:
+                    description: Override image digest for the CA Content Manager
+                    type: string
+                  ca_cpd_reporting:
+                    description: Override image digest for the CA Reporting
+                    type: string
+                  ca_cpd_rest:
+                    description: Override image digest for the CA Rest API
+                    type: string
+                  ca_cpd_smarts:
+                    description: Override image digest for the CA Smarts
+                    type: string
+                  ca_cpd_ubi_lite:
+                    description: Override image digest for the CA ubi lite
+                    type: string
+                type: object
+              hotfixStartup:
+                description: Optional flag to control whether to set the pre/post
+                  startup script into hotfix mode, meaning a reconcile won't reset
+                  it.
+                enum:
+                - false
+                - true
+                type: boolean
+              imageLinks:
+                description: Values of image link data which can be used to access
+                  user supplied images in CA.
+                items:
+                  type: string
+                type: array
+              namespace:
+                description: namespace where the service instance will be created.
+                type: string
+              persistCmDataCacheSizeGb:
+                default: 0
+                description: Optional value to control whether to persist CM data
+                  folder, if this attribute contains a non-zero value it will persist
+                  the data volume.
+                type: number
+              plan_size:
+                description: CA instance plan size (i.e small, medium, large)
+                enum:
+                - fixedminimum
+                - xsmall
+                - small
+                - small_mincpureq
+                - medium
+                - large
+                type: string
+              powerCube:
+                description: Values of CA powercube PVC added which can be used to
+                  enable powercubes from CA.
+                items:
+                  type: string
+                type: array
+              scaleConfig:
+                description: CA instance plan size (i.e small, medium, large).  Alias
+                  for plan_size.
+                enum:
+                - fixedminimum
+                - xsmall
+                - small
+                - small_mincpureq
+                - medium
+                - large
+                type: string
+              shutdown:
+                description: Controls stop / start of service
+                enum:
+                - "false"
+                - "true"
+                - force
+                type: string
+              storage_class:
+                description: storage class needed for the service instance.
+                type: string
+              storageClass:
+                description: storage class needed for the service instance. (deprecated)
+                type: string
+              version:
+                default: 28.0.0
+                description: version of the service instance
+                type: string
+              zen_service_instance_id:
+                description: zen instance id
+                type: string
+            required:
+            - zen_service_instance_id
+            - plan_size
+            - cs
+            - version
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            description: Status defines the observed state of CAServiceInstance
+            properties:
+              versions:
+                properties:
+                  available:
+                    properties:
+                      versions:
+                        items:
+                          properties:
+                            name:
+                              type: string
+                          required:
+                          - name
+                          type: object
+                        type: array
+                    type: object
+                  reconciled:
+                    type: string
+                required:
+                - reconciled
+                type: object
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

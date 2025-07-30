@@ -1,0 +1,477 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: db2u-operator
+  namespace: {{ .Values.global.operatorNamespace }}
+rules:
+  - apiGroups:
+      - ''
+    resources:
+      - configmaps
+      - configmaps/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ''
+    resources:
+      - endpoints
+      - endpoints/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ''
+    resources:
+      - events
+      - events/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ''
+    resources:
+      - persistentvolumeclaims
+      - persistentvolumeclaims/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ''
+    resources:
+      - pods
+      - pods/exec
+      - pods/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ''
+    resources:
+      - secrets
+      - secrets/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ''
+    resources:
+      - serviceaccounts
+      - serviceaccounts/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ''
+    resources:
+      - services
+      - services/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+      - deployments/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - replicasets
+      - replicasets/finalizers
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets
+      - statefulsets/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - apps.foundationdb.org
+    resources:
+      - foundationdbclusters
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - apps.foundationdb.org
+    resources:
+      - foundationdbclusters/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - autoscaling
+    resources:
+      - horizontalpodautoscalers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - batch
+    resources:
+      - cronjobs
+      - cronjobs/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - batch
+    resources:
+      - jobs
+      - jobs/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - create
+      - get
+      - list
+      - update
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - backups
+      - buckets
+      - formationlocks
+      - formations
+      - recipes
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - bigsqls
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - bigsqls/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - db2uclusters
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - db2uclusters/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - db2uclusters/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - db2uengines
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - db2uengines/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - db2uengines/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - db2uhadrs
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - db2uhadrs/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - db2uinstances
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - db2uinstances/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - db2uinstances/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - formations/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - formations/status
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - objectstorages
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - sirius
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - sirius/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - db2u.databases.ibm.com
+    resources:
+      - sirius/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - db2ulog.databases.ibm.com
+    resources:
+      - db2ulogstreams
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - networkpolicies
+      - networkpolicies/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - rolebindings
+      - rolebindings/finalizers
+      - roles
+      - roles/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - route.openshift.io
+    resources:
+      - routes
+      - routes/custom-host
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch

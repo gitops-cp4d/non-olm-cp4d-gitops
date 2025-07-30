@@ -1,0 +1,6 @@
+apiVersion: v2
+name: opensearch-operator-helm
+description: Helm chart for Opensearch Operator
+type: application
+version: 0.1.0
+appVersion: "1.1.2494"

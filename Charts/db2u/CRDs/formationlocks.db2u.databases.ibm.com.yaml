@@ -1,0 +1,45 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/instance: db2u-operator
+    app.kubernetes.io/managed-by: Db2U-Team
+    app.kubernetes.io/name: db2u-operator
+    olm.managed: "true"
+    operators.coreos.com/db2u-operator.swhub-operator: ""
+  name: formationlocks.db2u.databases.ibm.com
+spec:
+  conversion:
+    strategy: None
+  group: db2u.databases.ibm.com
+  names:
+    kind: FormationLock
+    listKind: FormationLockList
+    plural: formationlocks
+    singular: formationlock
+  scope: Namespaced
+  versions:
+    - name: v1
+      schema:
+        openAPIV3Schema:
+          properties:
+            apiVersion:
+              type: string
+            kind:
+              type: string
+            metadata:
+              type: object
+            spec:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+            status:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+          required:
+            - metadata
+            - spec
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

@@ -1,0 +1,10 @@
+global:
+  operatorNamespace: ""     
+  instanceNamespace: ""                   
+  blockStorageClass: ""
+  fileStorageClass: ""
+  
+image:
+  repository: icr.io/cpopen/ibm-db2aaservice-cp4d-operator
+  tag: "7.3.0"
+  digest: sha256:0dc2de5fa39668c6e9b95bc42e33a2ccdfcdfcaeee094c55808bbb5b0d66b2f2

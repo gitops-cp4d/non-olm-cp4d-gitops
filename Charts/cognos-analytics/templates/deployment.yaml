@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibm-ca-operator-controller-manager
+  namespace: {{ .Values.global.operatorNS }}
+  labels:
+    app.kubernetes.io/instance: ibm-ca-operator
+    app.kubernetes.io/managed-by: ibm-ca-operator
+    app.kubernetes.io/name: ibm-ca-operator
+    control-plane: controller-manager
+    icpdsupport/addOnId: cognos-analytics-app
+    icpdsupport/app: cognos-analytics
+    icpdsupport/ignore-on-nd-backup: "false"
+    icpdsupport/module: caservice
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: ibm-ca-operator
+      app.kubernetes.io/managed-by: ibm-ca-operator
+      app.kubernetes.io/name: ibm-ca-operator
+      control-plane: controller-manager
+      icpdsupport/addOnId: cognos-analytics-app
+      icpdsupport/app: cognos-analytics
+      icpdsupport/ignore-on-nd-backup: "false"
+      icpdsupport/module: caservice
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: ibm-ca-operator
+        app.kubernetes.io/managed-by: ibm-ca-operator
+        app.kubernetes.io/name: ibm-ca-operator
+        control-plane: controller-manager
+        icpdsupport/addOnId: cognos-analytics-app
+        icpdsupport/app: cognos-analytics
+        icpdsupport/ignore-on-nd-backup: "false"
+        icpdsupport/module: caservice
+        intent: projected
+      annotations:
+        cloudpakId: 5c92123b253a492780e6c6d4fe151d57
+        cloudpakName: IBM Cognos Analytics Extension for IBM Cloud Pak for Data
+        kubectl.kubernetes.io/default-container: manager
+        productID: 5c92123b253a492780e6c6d4fe151d57
+        productMetric: FREE
+        productName: IBM Cognos Analytics Extension for IBM Cloud Pak for Data
+        productVersion: 12.1.0
+    spec:
+      serviceAccountName: ibm-ca-operator-manager-serviceaccount
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+              weight: 3
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+      containers:
+        - name: manager
+          image: "{{ .Values.image.repository }}@{{ .Values.image.digest }}"
+          imagePullPolicy: Always
+          args:
+            - --enable-leader-election
+            - --leader-election-id=ibm-ca-operator
+            - --zap-log-level=error
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                  key: namespaces
+                  name: namespace-scope
+                  optional: true
+            - name: ANSIBLE_GATHERING
+              value: explicit
+            - name: ANSIBLE_NOCOLOR
+              value: "True"
+            - name: ANSIBLE_DEBUG_LOGS
+              value: "True"
+            - name: OPERATOR_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 6789
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 6789
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: "1"
+              ephemeral-storage: 500Mi
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              ephemeral-storage: 250Mi
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+      terminationGracePeriodSeconds: 10

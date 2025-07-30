@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: controller-manager
+  namespace: {{ .Values.global.operatorNamespace }}
+  labels:
+    control-plane: controller-manager
+    intent: projected
+    app.kubernetes.io/instance: ibm-cpd-openpages-operator
+    app.kubernetes.io/managed-by: ibm-cpd-openpages-operator
+    app.kubernetes.io/name: ibm-cpd-openpages-operator
+  annotations:
+    "ansible.sdk.operatorframework.io/verbosity": "3"
+spec:
+  selector:
+    matchLabels:
+      control-plane: controller-manager
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        control-plane: controller-manager
+        intent: projected
+        app.kubernetes.io/instance: ibm-cpd-openpages-operator
+        app.kubernetes.io/managed-by: ibm-cpd-openpages-operator
+        app.kubernetes.io/name: ibm-cpd-openpages-operator
+        icpdsupport/addOnId: openpages
+        icpdsupport/app: openpages
+        icpdsupport/module: openpages-operator
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+        productName: "IBM OpenPages"
+        productID: "eae2d462346e4d088cf6015560492317"
+        productVersion: "9.5.0"
+        productMetric: "FREE"
+        cloudpakName: "IBM OpenPages Cartridge"
+        cloudpakId: "eae2d462346e4d088cf6015560492317"
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: manager
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            # readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          env:
+            - name: ANSIBLE_NOCOLOR
+              value: "true"
+            - name: ANSIBLE_GATHERING
+              value: explicit
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                  name: namespace-scope
+                  key: namespaces
+                  optional: true
+            - name: OPERATOR_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: ANSIBLE_DEBUG_LOGS
+              value: "False"
+          {{- if .Values.image.digest }}
+          image: {{ .Values.image.repository }}@{{ .Values.image.digest }}
+          {{- else }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          {{- end }}
+          resources:
+            limits:
+              cpu: 500m
+              memory: 2Gi
+              ephemeral-storage: 900Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+              ephemeral-storage: 60Mi
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 6789
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 6789
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: controller-manager

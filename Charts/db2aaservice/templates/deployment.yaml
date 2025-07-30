@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db2aaservice-controller-manager
+  namespace: {{ .Values.global.operatorNamespace }}
+  labels:
+    control-plane: controller-manager
+spec:
+  affinity:
+    nodeAffinity: {}
+  selector:
+    matchLabels:
+      control-plane: controller-manager
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        control-plane: controller-manager
+        intent: projected
+        icpdsupport/addOnId: operator
+        icpdsupport/app: operator
+        icpdsupport/module: db2aaserviceoperator
+        component: db2aaservice
+    spec:
+      containers:
+        - name: manager
+          image: "{{ .Values.image.repository }}@{{ .Values.image.digest }}"
+          args:
+            - "--zap-log-level"
+            - "error"
+            - "--max-concurrent-reconciles"
+            - "8"
+          env:
+            - name: ANSIBLE_GATHERING
+              value: explicit
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                  name: namespace-scope
+                  key: namespaces
+            - name: META_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace               
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            readOnlyRootFilesystem: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+          livenessProbe:
+            httpGet:
+              path: /readyz
+              port: 6789
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 6789
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+              ephemeral-storage: 100Mi
+            limits:
+              cpu: 500m
+              memory: 1024Mi
+              ephemeral-storage: 500Mi
+      serviceAccountName: db2u-cp4d-operator
+      terminationGracePeriodSeconds: 10

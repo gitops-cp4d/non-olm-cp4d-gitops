@@ -1,0 +1,11 @@
+global:
+  operatorNamespace: ""     
+  instanceNamespace: ""                   
+  blockStorageClass: ""
+  fileStorageClass: ""
+
+image:
+  repository: icr.io/cpopen/ibm-cpd-ccs-operator
+  tag: "11.0.0"
+  digest: sha256:897a9a0e238669448e4b8128d12b9403eaeb820e353f0c63bde127f30ac1f1a1
+

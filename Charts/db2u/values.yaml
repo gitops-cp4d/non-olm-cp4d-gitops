@@ -1,0 +1,9 @@
+global:
+  operatorNamespace: ""     
+  instanceNamespace: ""                   
+  blockStorageClass: ""
+  fileStorageClass: ""
+  
+image:
+  repository: icr.io/cpopen/..
+  digest: sha256:..

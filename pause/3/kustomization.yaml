@@ -1,0 +1,8 @@
+resources:
+  - cpd-platform.yaml
+  - cs.yaml
+  - im.yaml
+  - zen.yaml
+  - postgresql.yaml
+  # - planning-analytics.yaml
+  - platform-config.yaml

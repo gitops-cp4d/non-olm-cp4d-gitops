@@ -1,0 +1,5 @@
+resources:
+  - cert-manager-app.yaml
+  - configmap-namespace-scope.yaml
+  - custom-health-checks.yaml
+  - namespaces.yaml

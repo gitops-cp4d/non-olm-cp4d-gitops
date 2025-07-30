@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cs-{{ .Values.global.appSuffix }}
+  namespace: {{ .Values.global.argocdNS }}
+spec:
+  destination:
+    name: ''
+    namespace: default
+    server: https://kubernetes.default.svc
+  source:
+    path: ''
+    repoURL: {{ .Values.global.helmRepoURL }}
+    targetRevision: {{ .Values.apps.cs.version }}
+    chart: {{ .Values.apps.cs.chart }}
+    helm:
+      valuesObject:
+        global:
+          licenseAccept: true
+          releaseVersion: 5.2.0
+          operatorNamespace: {{ .Values.global.operatorNS }}
+          instanceNamespace: {{ .Values.global.instanceNS }}
+          blockStorageClass: {{ .Values.global.blockStorageClass }}
+          fileStorageClass: {{ .Values.global.fileStorageClass }}
+          imagePullPrefix: {{ .Values.global.imagePullPrefix }}
+          imagePullSecret: {{ .Values.global.imagePullSecret }}
+  project: default
