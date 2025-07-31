@@ -12,7 +12,7 @@ spec:
     repoURL: {{ .Values.global.helmRepoURLdev }}
     targetRevision: main
     path: repos
-    chart: ibm-rabbitmq-operator-helm
+    chart: rabbitmq
     helm:
       releaseName: ibm-rabbitmq-operator-helm
       valueFiles:

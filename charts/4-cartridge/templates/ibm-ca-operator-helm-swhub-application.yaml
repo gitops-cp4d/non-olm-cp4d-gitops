@@ -12,7 +12,7 @@ spec:
     repoURL: {{ .Values.global.helmRepoURLdev }}
     targetRevision: main
     path: repos
-    chart: ibm-ca-operator-helm
+    chart: cognos-analytics
     helm:
       releaseName: ibm-ca-operator-helm
       valueFiles:

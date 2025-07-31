@@ -12,7 +12,7 @@ spec:
     repoURL: {{ .Values.global.helmRepoURLdev }}
     targetRevision: main
     path: repos
-    chart: openpages-operator
+    chart: openpages
     helm:
       releaseName: openpages-operator
       valueFiles:

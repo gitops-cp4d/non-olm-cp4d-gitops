@@ -12,7 +12,7 @@ spec:
     repoURL: {{ .Values.global.helmRepoURLdev }}
     targetRevision: main
     path: repos
-    chart: ibm-ccs-operator-helm
+    chart: ccs
     helm:
       releaseName: ibm-ccs-operator-helm
       valueFiles:

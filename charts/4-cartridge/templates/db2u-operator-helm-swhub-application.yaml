@@ -12,7 +12,7 @@ spec:
     repoURL: {{ .Values.global.helmRepoURLdev }}
     targetRevision: main
     path: repos
-    chart: db2u-operator-helm
+    chart: db2u
     helm:
       releaseName: db2u-operator-helm
       valueFiles:
