@@ -1,0 +1,6 @@
+resources:
+  - ../db2aaservice.yaml
+  - ../db2u.yaml
+  - ../rabbitmq.yaml
+  - ../openpages.yaml
+

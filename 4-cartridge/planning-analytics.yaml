@@ -1,0 +1,62 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: planning-analytics-${appSuffix}
+  namespace: ${argocdNS}
+spec:
+  destination:
+    name: ''
+    namespace: default
+    server: https://kubernetes.default.svc
+  source:
+    path: ''
+    repoURL: ${helmRepoURL}
+    targetRevision: ${planning-analytics-version}
+    chart: ${planning-analytics-chart}
+    helm:
+      valuesObject:
+        global:
+          licenseAccept: true
+          operatorNamespace: ${operatorNS}
+          instanceNamespace: ${instanceNS}
+          releaseVersion: 5.2.0
+          tetheredNamespaces: []
+          blockStorageClass: ${blockStorageClass}
+          fileStorageClass: ${fileStorageClass}
+          imagePullPrefix: cp.icr.io
+          imagePullSecret: ${imagePullSecret}
+          installConfigImageDigest: ${installConfigImageDigest}
+          installConfigImageName: cpopen/cpd/olm-utils-v3
+        planning_analytics:
+          non_olm: true
+          crVersion: 5.2.0
+          imagePullSubDir: "cp/cpd"
+          operatorImageName: cpopen/ibm-planning-analytics-operator
+          operatorImageDigest:
+            amd64: sha256:d4eb8e4ba47f20163d5c48fa1c60b582ba5b649da6c4b3884c366762d22c3c01
+            ppc64le: ""
+            s390x: ""
+          tm1:
+            operatorImageName: cpopen/ibm-planning-analytics-tm1-operator
+            operatorImageDigest:
+              amd64: sha256:d4e5cf3f8a6348e53e43dbbb8caf47ae44a8ee8c5e8b0f1b7d12d9d328b2d1a7
+              ppc64le: ""
+              s390x: ""
+          pass:
+            operatorImageName: cpopen/ibm-planning-analytics-spreadsheet-operator
+            operatorImageDigest:
+              amd64: sha256:5cebbaa872bb38df5ed98d6d7df2b6142f8ae0281ec470e7cfc66a1af72bc067
+              ppc64le: ""
+              s390x: ""
+          catalogSourceName: "ibm-planning-analytics-operator-catalog"
+          subscriptionName: "ibm-planning-analytics-subscription"
+          serviceAccountName: "pa-operator-sa"
+          operandRequestName: ""
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

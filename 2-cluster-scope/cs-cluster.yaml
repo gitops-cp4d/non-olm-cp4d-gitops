@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cs-cluster-${appSuffix}
+  namespace: ${argocdNS}
+spec:
+  destination:
+    name: ''
+    namespace: default
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: ${helmRepoURL}
+    chart: ${cs-cluster-chart}
+    targetRevision: ${cs-cluster-version}
+    helm:
+      valuesObject:
+        global:
+          operatorNamespace: ${operatorNS}
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

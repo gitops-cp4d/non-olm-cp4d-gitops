@@ -1,5 +1,0 @@
-apiVersion: v2
-name: 1-foundation
-description: Foundation resources (Namespaces, RBAC for Argo)
-type: application
-version: 0.1.0

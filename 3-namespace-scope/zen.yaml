@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: zen-${appSuffix}
+  namespace: ${argocdNS}
+spec:
+  ignoreDifferences:
+    - kind: "*"
+      group: "*"
+      jsonPointers:
+        - /metadata/annotations
+        - /metadata/labels
+  destination:
+    name: ''
+    namespace: default
+    server: https://kubernetes.default.svc
+  source:
+    path: ''
+    repoURL: ${helmRepoURL}
+    targetRevision: ${apps.zen.version}
+    chart: ${apps.zen.chart}
+    helm:
+      valuesObject:
+        global:
+          licenseAccept: true
+          operatorNamespace: ${operatorNS}
+          instanceNamespace: ${instanceNS}
+          blockStorageClass: ${blockStorageClass}
+          fileStorageClass: ${fileStorageClass}
+          imagePullPrefix: ${imagePullPrefix}
+          imagePullSecret: ${imagePullSecret}
+          installConfigImageDigest: ${installConfigImageDigest}
+          installConfigImageName: cpopen/cpd/olm-utils-v3
+          releaseVersion: 5.2.0
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

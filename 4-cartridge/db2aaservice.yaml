@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: db2aaservice-operator-helm-${appSuffix}
+  namespace: ${argocdNS}
+spec:
+  destination:
+    name: ''
+    namespace: default
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: ${helmRepoURLdev}
+    targetRevision: main
+    path: repos
+    chart: db2aaservice
+    helm:
+      releaseName: db2aaservice-operator-helm
+      valueFiles:
+        - ../values.yaml
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

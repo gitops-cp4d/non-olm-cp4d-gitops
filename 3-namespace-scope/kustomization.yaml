@@ -1,0 +1,7 @@
+resources:
+  - cpd-platform.yaml
+  - cs.yaml
+  - im.yaml
+  - platform-config.yaml
+  - postgresql.yaml
+  - zen.yaml

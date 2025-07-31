@@ -1,0 +1,8 @@
+resources:
+  - 1-foundation
+  - 2-cluster-scope
+  - 3-namespace-scope
+  ## cartridges to be enable
+  - 4-cartridge/planning-analytics
+  # - 4-cartridge/openpages
+  # - 4-cartridge/cognos-analytics

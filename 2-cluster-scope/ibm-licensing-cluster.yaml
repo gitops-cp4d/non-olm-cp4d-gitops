@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ibm-licensing-cluster-${appSuffix}
+  namespace: ${argocdNS}
+spec:
+  destination:
+    name: ''
+    namespace: default
+    server: https://kubernetes.default.svc
+  source:
+    path: ''
+    repoURL: ${helmRepoURL}
+    targetRevision: ${ibm-licensing-cluster-version}
+    chart: ${ibm-licensing-cluster-chart}
+    helm:
+      valuesObject:
+        global:
+          licenseAccept: true
+          imagePullPrefix: ${imagePullPrefix}
+          imagePullSecret: ${imagePullSecret}
+        ibmLicensing:
+          namespace: ${licensingNS}
+          watchNamespace: ${licensingNS},${operatorNS},${instanceNS}
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

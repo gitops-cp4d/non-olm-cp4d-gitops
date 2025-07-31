@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: platform-config-${appSuffix}
+  namespace: ${argocdNS}
+spec:
+  destination:
+    name: ''
+    namespace: default
+    server: https://kubernetes.default.svc
+  source:
+    path: ''
+    repoURL: ${helmRepoURL}
+    targetRevision: ${platform-config-version}
+    chart: ${platform-config-chart}
+    helm:
+      valuesObject:
+        global:
+          licenseAccept: true
+          releaseVersion: {? {.Values.global.releaseVersion | default "5.2.0": ''} : ''}
+          operatorNamespace: ${operatorNS}
+          instanceNamespace: ${instanceNS}
+          imagePullPrefix: ${imagePullPrefix}
+          imagePullSecret: ${imagePullSecret}
+          installConfigImageDigest: ${installConfigImageDigest}
+          installConfigImageName: cpopen/cpd/olm-utils-v3
+          components:
+            - planning_analytics
+            - cpd_platform
+        commands:
+          applyEntitlement:
+            - entitlement: cpd-enterprise
+              production: "false"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

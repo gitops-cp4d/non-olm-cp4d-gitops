@@ -1,0 +1,7 @@
+resources:
+  - cpd-platform-cluster.yaml
+  - cs-cluster.yaml
+  - ibm-licensing-cluster.yaml
+  - im-cluster.yaml
+  - postgresql-cluster.yaml
+  - zen-cluster.yaml

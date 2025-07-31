@@ -1,0 +1,3 @@
+resources:
+  - ../planning-analytics-cluster.yaml
+  - ../planning-analytics.yaml

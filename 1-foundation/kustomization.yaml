@@ -1,0 +1,3 @@
+resources:
+  - configmap-namespace-scope.yaml
+  - namespaces.yaml
