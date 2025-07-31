@@ -14,3 +14,6 @@ dependencies:
   - name: 3-namespace-scope
     version: "0.1.0"
     repository: "file://./charts/3-namespace-scope"
+  - name: 4-cartridge
+    version: "0.1.0"
+    repository: "file://./charts/4-cartridge"
