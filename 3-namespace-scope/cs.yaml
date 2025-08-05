@@ -11,8 +11,8 @@ spec:
   source:
     path: ''
     repoURL: ${helmRepoURL}
-    targetRevision: ${apps.cs.version}
-    chart: ${apps.cs.chart}
+    targetRevision: ${cs-version}
+    chart: ${cs-chart}
     helm:
       valuesObject:
         global:

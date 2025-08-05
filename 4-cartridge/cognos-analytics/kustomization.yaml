@@ -1,5 +1,5 @@
 resources:
-  - ../ccs.yaml
-  - ../opensearch.yaml
-  - ../cognos-analytics.yaml
+  - ccs.yaml
+  - opensearch.yaml
+  - cognos-analytics.yaml
 

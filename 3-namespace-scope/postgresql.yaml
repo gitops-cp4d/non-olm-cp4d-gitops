@@ -11,8 +11,8 @@ spec:
   source:
     path: ''
     repoURL: ${helmRepoURL}
-    targetRevision: ${apps.postgresql.version}
-    chart: ${apps.postgresql.chart}
+    targetRevision: ${postgresql-version}
+    chart: ${postgresql-chart}
     helm:
       valuesObject:
         global:

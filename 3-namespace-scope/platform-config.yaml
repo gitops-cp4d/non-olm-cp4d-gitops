@@ -17,7 +17,7 @@ spec:
       valuesObject:
         global:
           licenseAccept: true
-          releaseVersion: {? {.Values.global.releaseVersion | default "5.2.0": ''} : ''}
+          releaseVersion: 5.2.0
           operatorNamespace: ${operatorNS}
           instanceNamespace: ${instanceNS}
           imagePullPrefix: ${imagePullPrefix}

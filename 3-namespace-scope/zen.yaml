@@ -17,8 +17,8 @@ spec:
   source:
     path: ''
     repoURL: ${helmRepoURL}
-    targetRevision: ${apps.zen.version}
-    chart: ${apps.zen.chart}
+    targetRevision: ${zen-version}
+    chart: ${zen-chart}
     helm:
       valuesObject:
         global:

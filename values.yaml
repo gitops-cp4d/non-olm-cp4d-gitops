@@ -9,10 +9,9 @@ global:
   imagePullSecret: ibm-entitlement-key
   argocdNS: openshift-gitops
   helmRepoURL: https://gitops-cp4d.github.io/non-olm-cp4d-gitops/repos
-  helmRepoURLdev: https://github.com/gitops-cp4d/non-olm-cp4d-gitops.git ## Dev
+  helmRepoURLdev: https://github.com/gitops-cp4d/non-olm-cp4d-gitops.git 
   installConfigImageDigest: "sha256:f97f1b364a27acfe08b1c80d9ce91c25f07e6005a7ba821abf164c8e38925a04"
   
-  ## cluster scoped charts
   cpd-platform-cluster:
     chart: cpd-platform-cluster-scoped
     version: 5.2.0+20250516.013559.108
@@ -35,7 +34,7 @@ global:
     chart: ibm-licensing-cluster-scoped
     version: 4.2.16+20250604.153216.0
 
-  ## namespaces scoped charts
+
   cs:
     chart: ibm-common-service-operator
     version: 4.13.0+20250527.133754.0
