@@ -6,10 +6,9 @@ This project implements automated GitOps installation and management for IBM Clo
 ```
 .
 ├── 0-bootstrap/          # Bootstrap scripts and initialisation resources
-├── 1-foundation/         # Infrastructure and global dependencies
-├── 2-cluster-scope/      # Cluster-scoped resources
-├── 3-namespace-scope/    # Namespace-scoped operators
-├── 4-cartridge/          # CP4D Cartridges and their dependencies
+├── 1-cluster-scope/      # Cluster-scoped resources
+├── 2-namespace-scope/    # Namespace-scoped operators
+├── 3-cartridge/          # CP4D Cartridges and their dependencies
 ├── cp4d-gitops.yaml      # Top-level ArgoCD Application
 ├── kustomization.yaml    # Root Kustomize aggregation file
 ├── repos/                # Helm chart packages
@@ -66,6 +65,6 @@ Remaining resource sync and lifecycle management is fully automated by ArgoCD an
 ## Development Guide
 
 - You are welcome to contribute more dependencies or cartridges. Please follow the existing layered directory structure for expansion.
-- New dependencies should be placed in `4-cartridge/<cartridge-name>/` with a dedicated `kustomization.yaml` for modular aggregation.
+- New dependencies should be placed in `3-cartridge/<cartridge-name>/` with a dedicated `kustomization.yaml` for modular aggregation.
 - It is recommended to manage all parameters centrally in `values.yaml`.
 - For development and extension, please refer to the technical specification: [Technical Specification: Non-OLM Install Method](https://github.ibm.com/PrivateCloud-analytics/CPD-TechSpec/blob/master/non-OLM-install-method.md)
