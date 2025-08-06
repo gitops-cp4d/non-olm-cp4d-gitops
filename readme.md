@@ -44,9 +44,10 @@ This project aims to automated the Non-OLM installation method for CP4D and Cart
 2. Edit the root `values.yaml` to customize namespaces, storage classes, and other parameters.  
 If you are using a [Techzone environment](https://techzone.ibm.com/collection/tech-zone-certified-base-images/journey-base-open-shift), most parameters can be left as default.
 
-3. Edit the root `kustomization.yaml` as needed. You can enable or disable any cartridge module by commenting or uncommenting its resource.
+3. Edit the root `kustomization.yaml` as needed. You can enable or disable any cartridge module by commenting or uncommenting its resource. It is recommended to disable all cartridges at first. Only enable (uncomment) the 3-cartridge resources in `kustomization.yaml` after Software Hub installation is completed and both `1-cluster-scope/` and `2-namespace-scope/` resources have been successfully reconciled.
 
-4. Run the bootstrap script:
+
+4. Run the bootstrap script (only required for the first time setup):
     ```
     ./0-bootstrap/bootstrap.sh
     ```
@@ -60,7 +61,8 @@ If you are using a [Techzone environment](https://techzone.ibm.com/collection/te
     - Apply the top-level ArgoCD Application (`cp4d-gitops.yaml`)
     - Output ArgoCD dashboard login information
 
-Remaining resource sync and lifecycle management is fully automated by ArgoCD and can be managed through its UI.
+5. Any further changes (including enabling/disabling cartridges by commenting/uncommenting their resources in `kustomization.yaml` after Software Hub installation is completed) should be committed and pushed to your Git repository directly. ArgoCD will automatically detect and synchronize all changes from Git.
+
 
 ## Development Guide
 
