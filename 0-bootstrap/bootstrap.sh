@@ -77,6 +77,8 @@ print_log "SUCCESS" "Updated cp4d-gitops.yaml with repoURL: $REPO_URL"
 echo "==> Would you like to commit and push the YAML changes now? (y/n):"
 read -r PUSH_NOW
 if [[ "$PUSH_NOW" =~ ^[Yy]$ ]]; then
+  REPO_ROOT="$(cd .. && pwd)"
+  cd "$REPO_ROOT"
   git add .
   if git diff --cached --quiet; then
     print_log "INFO" "No changes to commit."
@@ -85,6 +87,7 @@ if [[ "$PUSH_NOW" =~ ^[Yy]$ ]]; then
     git push
     print_log "SUCCESS" "Changes committed and pushed to Git."
   fi
+  cd - >/dev/null
 fi
 
 # Apply custom resources
