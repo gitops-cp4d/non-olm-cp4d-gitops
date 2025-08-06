@@ -1,8 +1,8 @@
 global:
-  operatorNS: swhub-operator
-  instanceNS: swhub-instance
-  licensingNS: swhub-licensing
-  appSuffix: swhub
+  operatorNS: gitops-operator
+  instanceNS: gitops-instance
+  licensingNS: gitops-licensing
+  appSuffix: gitops
   fileStorageClass: ocs-external-storagecluster-cephfs
   blockStorageClass: ocs-external-storagecluster-ceph-rbd
   imagePullPrefix: icr.io
