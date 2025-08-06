@@ -2,6 +2,6 @@ resources:
   - ccs.yaml
   - opensearch.yaml
   - cognos-analytics.yaml
-  - ccs-cluser.yaml
-  - opensearch-cluser.yaml
-  - cognos-analytics-cluser.yaml
+  - ccs-cluster.yaml
+  - opensearch-cluster.yaml
+  - cognos-analytics-cluster.yaml
