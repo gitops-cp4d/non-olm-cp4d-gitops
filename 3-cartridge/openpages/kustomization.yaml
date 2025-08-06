@@ -3,4 +3,7 @@ resources:
   - db2u.yaml
   - rabbitmq.yaml
   - openpages.yaml
-
+  - db2aaservice-cluser.yaml
+  - db2u-cluser.yaml
+  - rabbitmq-cluser.yaml
+  - openpages-cluser.yaml

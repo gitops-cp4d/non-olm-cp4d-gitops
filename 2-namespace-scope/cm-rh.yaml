@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: db2aaservice-${appSuffix}
+  name: rh-cert-manager-${appSuffix}
   namespace: ${argocdNS}
 spec:
   destination:
@@ -12,9 +12,9 @@ spec:
     repoURL: ${helmRepoURLdev}
     targetRevision: main
     path: repos
-    chart: db2aaservice
+    chart: rh-cert-manager
     helm:
-      releaseName: db2aaservice-operator-helm
+      releaseName: cert-manager-operator-helm
       valueFiles:
         - ../values.yaml
   project: default

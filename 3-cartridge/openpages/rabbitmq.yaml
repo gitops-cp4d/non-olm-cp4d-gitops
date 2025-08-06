@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ibm-rabbitmq-operator-helm-${appSuffix}
+  name: rabbitmq-${appSuffix}
   namespace: ${argocdNS}
 spec:
   destination:

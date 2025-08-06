@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ibm-ccs-operator-helm-${appSuffix}
+  name: ccs-${appSuffix}
   namespace: ${argocdNS}
 spec:
   destination:

@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: db2u-${appSuffix}
+  name: rh-cert-manager-cluster-${appSuffix}
   namespace: ${argocdNS}
 spec:
   destination:
@@ -9,19 +9,11 @@ spec:
     namespace: default
     server: https://kubernetes.default.svc
   source:
-    repoURL: ${helmRepoURLdev}
+    repoURL: 'https://github.com/gitops-cp4d/non-olm-cp4d-gitops.git'
     targetRevision: main
-    path: repos
-    chart: db2u
-    helm:
-      releaseName: db2u-operator-helm
-      valueFiles:
-        - ../values.yaml
+    path: repos/rh-cert-manager/crds
   project: default
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
-      - ServerSideApply=true

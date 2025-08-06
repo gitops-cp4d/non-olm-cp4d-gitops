@@ -1,0 +1,10 @@
+global:
+  operatorNamespace: ""     
+  instanceNamespace: ""                   
+  blockStorageClass: ""
+  fileStorageClass: ""
+  
+# image:
+#   repository: icr.io/cpopen/opencontent-rabbitmq-operator
+#   tag: 1.2.65
+#   digest: sha256:bcbace0ded13b4393a7731ca6eeb35aa562ff6fa42b1a41350c78b243ec8e411

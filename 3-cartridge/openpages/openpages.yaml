@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: openpages-operator-${appSuffix}
+  name: openpages-${appSuffix}
   namespace: ${argocdNS}
 spec:
   destination:
