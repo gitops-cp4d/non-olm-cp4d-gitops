@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: 'https://github.com/gitops-cp4d/non-olm-cp4d-gitops.git'
     targetRevision: main
-    path: repos/opensearch/crds
+    path: repos/opensearch/cluster-scope
   project: default
   syncPolicy:
     automated:

@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: 'https://github.com/gitops-cp4d/non-olm-cp4d-gitops.git'
     targetRevision: main
-    path: repos/rh-cert-manager/crds
+    path: repos/rh-cert-manager/cluster-scope
   project: default
   syncPolicy:
     automated:
