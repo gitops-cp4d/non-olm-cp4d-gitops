@@ -5,3 +5,4 @@ resources:
   - im-cluster.yaml
   - postgresql-cluster.yaml
   - zen-cluster.yaml
+  - rh-cert-manager.yaml
