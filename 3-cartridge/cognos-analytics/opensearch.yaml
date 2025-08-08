@@ -11,10 +11,8 @@ spec:
   source:
     repoURL: ${argoSourceRepoURL}
     targetRevision: main
-    path: repos
-    chart: opensearch
+    path: repos/opensearch
     helm:
-      releaseName: opensearch-operator-helm
       valueFiles:
         - ../../values.yaml
   project: default

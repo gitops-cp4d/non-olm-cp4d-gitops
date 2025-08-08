@@ -11,10 +11,8 @@ spec:
   source:
     repoURL: ${argoSourceRepoURL}
     targetRevision: main
-    path: repos
-    chart: db2aaservice
+    path: repos/db2aaservice
     helm:
-      releaseName: db2aaservice-operator-helm
       valueFiles:
         - ../../values.yaml
   project: default

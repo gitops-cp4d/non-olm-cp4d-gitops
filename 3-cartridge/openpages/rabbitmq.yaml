@@ -11,10 +11,8 @@ spec:
   source:
     repoURL: ${argoSourceRepoURL}
     targetRevision: main
-    path: repos
-    chart: rabbitmq
+    path: repos/rabbitmq
     helm:
-      releaseName: ibm-rabbitmq-operator-helm
       valueFiles:
         - ../../values.yaml
   project: default

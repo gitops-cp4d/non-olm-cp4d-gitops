@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: <repoURL>
+    repoURL: ${argoSourceRepoURL}
     targetRevision: main
     path: .
     kustomize: {}

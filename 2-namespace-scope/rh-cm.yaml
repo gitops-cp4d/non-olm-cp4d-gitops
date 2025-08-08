@@ -11,10 +11,8 @@ spec:
   source:
     repoURL: ${argoSourceRepoURL}
     targetRevision: main
-    path: repos
-    chart: rh-cert-manager
+    path: repos/rh-cert-manager
     helm:
-      releaseName: cert-manager-operator-helm
       valueFiles:
         - ../../values.yaml
   project: default

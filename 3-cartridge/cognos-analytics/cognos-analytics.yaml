@@ -11,10 +11,8 @@ spec:
   source:
     repoURL: ${argoSourceRepoURL}
     targetRevision: main
-    path: repos
-    chart: cognos-analytics
+    path: repos/cognos-analytics
     helm:
-      releaseName: ibm-ca-operator-helm
       valueFiles:
         - ../../values.yaml
   project: default

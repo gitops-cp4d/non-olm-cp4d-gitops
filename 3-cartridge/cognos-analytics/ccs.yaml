@@ -11,10 +11,8 @@ spec:
   source:
     repoURL: ${argoSourceRepoURL}
     targetRevision: main
-    path: repos
-    chart: ccs
+    path: repos/ccs
     helm:
-      releaseName: ibm-ccs-operator-helm
       valueFiles:
         - ../../values.yaml
   project: default

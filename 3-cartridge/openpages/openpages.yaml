@@ -11,10 +11,8 @@ spec:
   source:
     repoURL: ${argoSourceRepoURL}
     targetRevision: main
-    path: repos
-    chart: openpages
+    path: repos/openpages
     helm:
-      releaseName: openpages-operator
       valueFiles:
         - ../../values.yaml
   project: default
