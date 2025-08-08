@@ -6,8 +6,6 @@ metadata:
   labels:
     control-plane: controller-manager
 spec:
-  affinity:
-    nodeAffinity: {}
   selector:
     matchLabels:
       control-plane: controller-manager
