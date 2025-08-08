@@ -16,7 +16,7 @@ spec:
     helm:
       releaseName: openpages-operator
       valueFiles:
-        - ../values.yaml
+        - ../../values.yaml
   project: default
   syncPolicy:
     automated:

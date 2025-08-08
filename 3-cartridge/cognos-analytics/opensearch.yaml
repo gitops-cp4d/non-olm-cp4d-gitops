@@ -16,7 +16,7 @@ spec:
     helm:
       releaseName: opensearch-operator-helm
       valueFiles:
-        - ../values.yaml
+        - ../../values.yaml
   project: default
   syncPolicy:
     automated:

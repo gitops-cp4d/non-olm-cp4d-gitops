@@ -16,7 +16,7 @@ spec:
     helm:
       releaseName: cert-manager-operator-helm
       valueFiles:
-        - ../values.yaml
+        - ../../values.yaml
   project: default
   syncPolicy:
     automated:
