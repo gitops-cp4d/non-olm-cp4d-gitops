@@ -67,11 +67,11 @@ rm -f "$TMP_KV"
 print_log "SUCCESS" "All parameter placeholders have been replaced."
 
 # Set Argo CD source Git repo URL
-echo "==> Enter the Argo CD application source Git repo URL:"
-read -rp "Repo URL: " REPO_URL
-sed -i.bak -E "s|(repoURL:[[:space:]]+)[^[:space:]]+|\1${REPO_URL}|" ../cp4d-gitops.yaml
-rm -f ../cp4d-gitops.yaml.bak
-print_log "SUCCESS" "Updated cp4d-gitops.yaml with repoURL: $REPO_URL"
+# echo "==> Enter the Argo CD application source Git repo URL:"
+# read -rp "Repo URL: " REPO_URL
+# sed -i.bak -E "s|(repoURL:[[:space:]]+)[^[:space:]]+|\1${REPO_URL}|" ../cp4d-gitops.yaml
+# rm -f ../cp4d-gitops.yaml.bak
+# print_log "SUCCESS" "Updated cp4d-gitops.yaml with repoURL: $REPO_URL"
 
 # Commit and push changes to Git 
 echo "==> Would you like to commit and push the YAML changes now? (y/n):"

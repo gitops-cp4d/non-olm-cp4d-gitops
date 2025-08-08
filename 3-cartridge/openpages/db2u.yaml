@@ -9,7 +9,7 @@ spec:
     namespace: default
     server: https://kubernetes.default.svc
   source:
-    repoURL: ${helmRepoURLdev}
+    repoURL: ${argoSourceRepoURL}
     targetRevision: main
     path: repos
     chart: db2u
