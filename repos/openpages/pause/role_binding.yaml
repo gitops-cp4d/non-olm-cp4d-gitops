@@ -14,5 +14,5 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: controller-manager
-  namespace: {{ .Values.global.operatorNamespace }}
+  namespace: {{ .Values.global.operatorNS }}
 

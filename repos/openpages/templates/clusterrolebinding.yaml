@@ -5,7 +5,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: controller-manager
-    namespace: {{ .Values.global.operatorNamespace }}
+    namespace: {{ .Values.global.operatorNS }}
 roleRef:
   kind: ClusterRole
   name: openpages-clusterrole

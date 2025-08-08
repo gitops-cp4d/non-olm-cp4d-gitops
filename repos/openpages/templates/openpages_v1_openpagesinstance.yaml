@@ -2,7 +2,7 @@ apiVersion: openpages.cpd.ibm.com/v1
 kind: OpenPagesInstance
 metadata:
   name: openpagesinstance1
-  namespace: {{ .Values.global.instanceNamespace }}
+  namespace: {{ .Values.global.instanceNS }}
   annotations:
     "ansible.sdk.operatorframework.io/verbosity": "3"
   labels:
@@ -11,7 +11,7 @@ metadata:
     app.kubernetes.io/version: "9.5.0"
     app.kubernetes.io/managed-by: "ibm-cpd-openpages-operator"
 spec:
-  zenControlPlaneNamespace: {{ .Values.global.instanceNamespace }}
+  zenControlPlaneNamespace: {{ .Values.global.instanceNS }}
   description: "OpenPages instance"
   version: "9.5.0"
   autoScaleConfig: false

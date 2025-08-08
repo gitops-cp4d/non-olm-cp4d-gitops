@@ -2,7 +2,7 @@ apiVersion: openpages.cpd.ibm.com/v1
 kind: OpenPagesService
 metadata:
   name: openpagesservice-cr
-  namespace: {{ .Values.global.instanceNamespace }}
+  namespace: {{ .Values.global.instanceNS }}
   labels:
     app.kubernetes.io/name: openpages
     app.kubernetes.io/instance: "openpagesservice-cr"

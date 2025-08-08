@@ -3,7 +3,7 @@ kind: Role
 metadata:
   creationTimestamp: null
   name: {{ .Release.Name }}-operator
-  namespace: {{ .Values.global.operatorNamespace }}
+  namespace: {{ .Values.global.operatorNS }}
   labels:
     app.kubernetes.io/instance: {{ .Release.Name }}-operator
     app.kubernetes.io/managed-by: {{ .Release.Name }}-operator

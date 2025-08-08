@@ -3,7 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: db2aaservice-manager-role
-  namespace: {{ .Values.global.operatorNamespace }}
+  namespace: {{ .Values.global.operatorNS }}
   labels:
     component: db2aaservice
 rules:

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ibm-opensearch-operator-controller-manager
-  namespace: {{ .Values.global.operatorNamespace }}
+  namespace: {{ .Values.global.operatorNS }}
   labels:
     app.kubernetes.io/component: manager
     app.kubernetes.io/created-by: ibm-opensearch-operator

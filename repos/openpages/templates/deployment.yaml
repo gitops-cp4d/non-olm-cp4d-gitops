@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: controller-manager
-  namespace: {{ .Values.global.operatorNamespace }}
+  namespace: {{ .Values.global.operatorNS }}
   labels:
     control-plane: controller-manager
     intent: projected

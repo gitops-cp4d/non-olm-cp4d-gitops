@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: db2u-day2-ops-controller-manager
-  namespace: {{ .Values.global.instanceNamespace }}
+  namespace: {{ .Values.global.instanceNS }}
 rules:
   - apiGroups:
       - ''

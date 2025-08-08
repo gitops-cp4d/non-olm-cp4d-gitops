@@ -3,7 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: db2aaservice-manager-rolebinding
-  namespace: {{ .Values.global.instanceNamespace }}
+  namespace: {{ .Values.global.instanceNS }}
   labels:
     component: db2aaservice
 roleRef:
@@ -12,5 +12,5 @@ roleRef:
   name: db2aaservice-manager-role
 subjects:
 - kind: ServiceAccount
-  namespace: {{ .Values.global.operatorNamespace }}
+  namespace: {{ .Values.global.operatorNS }}
   name: db2u-cp4d-operator

@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ .Release.Name }}-operator
-  namespace: {{ .Values.global.operatorNamespace }}
+  namespace: {{ .Values.global.operatorNS }}
   labels:
     app.kubernetes.io/instance: ibm-rabbitmq-operator
     app.kubernetes.io/managed-by: ibm-rabbitmq-operator
@@ -10,7 +10,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: {{ .Release.Name }}-operator
-  namespace: {{ .Values.global.operatorNamespace }}
+  namespace: {{ .Values.global.operatorNS }}
 roleRef:
   kind: Role
   name: {{ .Release.Name }}-operator
