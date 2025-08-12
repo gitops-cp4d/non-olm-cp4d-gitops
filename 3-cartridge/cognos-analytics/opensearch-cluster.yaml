@@ -9,7 +9,7 @@ spec:
     namespace: default
     server: https://kubernetes.default.svc
   source:
-    repoURL: 'https://github.com/gitops-cp4d/non-olm-cp4d-gitops.git'
+    repoURL: ${argoSourceRepoURL}
     targetRevision: main
     path: repos/opensearch/cluster-scope
   project: default
