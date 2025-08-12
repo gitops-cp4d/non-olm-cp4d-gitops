@@ -5,3 +5,5 @@ resources:
   # - 3-cartridge/planning-analytics
   # - 3-cartridge/openpages
   # - 3-cartridge/cognos-analytics
+  ## Please make sure you have done the prerequisite for watsonx.ai https://www.ibm.com/docs/en/software-hub/5.2.x?topic=cluster-installing-prerequisite-software
+  # - 3-cartridge/watsonx-ai
