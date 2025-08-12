@@ -1,0 +1,138 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caikit-runtime-stack-operator
+  namespace: {{ .Values.global.operatorNamespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caikit-runtime-stack-operator
+      component: operator
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        cloudpakId: 5e4c7dd451f14946bc298e18851f3746
+        cloudpakName: IBM watsonx.ai
+        productID: 3a6d4448ec8342279494bc22e36bc318
+        productMetric: FREE
+        productName: IBM watsonx.ai
+        productVersion: 11.0.0
+      creationTimestamp: null
+      labels:
+        app: caikit-runtime-stack-operator
+        app.kubernetes.io/instance: caikit-runtime-stack-operator
+        app.kubernetes.io/managed-by: caikit-runtime-stack-operator
+        app.kubernetes.io/name: caikit-runtime-stack-operator
+        component: operator
+        icpdsupport/addOnId: watsonx_ai
+        icpdsupport/app: operator
+        icpdsupport/module: caikit-runtime-stack-operator
+        intent: projected
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+                      - ppc64le
+                      - s390x
+      containers:
+        - env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                  key: namespaces
+                  name: namespace-scope
+                  optional: true
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: REQUEUE_AFTER_SECONDS
+              value: "5"
+            - name: PYTHON_WATCH_MANAGER_WATCH_DEPENDENT_RESOURCES
+              value: "true"
+            - name: PYTHON_WATCH_MANAGER_HEARTBEAT_FILE
+              value: /home/oper8/heartbeat.txt
+            - name: PYTHON_WATCH_MANAGER_HEARTBEAT_PERIOD
+              value: 15s
+            - name: LOG_JSON
+              value: "true"
+            - name: VCS_ENABLED
+              value: "true"
+          image: icr.io/cpopen/caikit-runtime-stack-operator@sha256:b93d0c02d7a8fc71b865a04580d025eb86ebf53cc4799ae84554f6596dfcad06
+          livenessProbe:
+            exec:
+              command:
+                - /opt/oper8/app/check_heartbeat.sh
+                - /home/oper8/heartbeat.txt
+                - "120"
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: operator
+          readinessProbe:
+            exec:
+              command:
+                - /opt/oper8/app/check_heartbeat.sh
+                - /home/oper8/heartbeat.txt
+                - "60"
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: "1"
+              ephemeral-storage: 5Gi
+              memory: 2Gi
+            requests:
+              cpu: 250m
+              ephemeral-storage: 1Gi
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /home/oper8
+              name: home
+            - mountPath: /tmp
+              name: tmp
+            - mountPath: /opt/oper8/app/.git/refs/heads
+              name: oper8-vcs-head
+            - mountPath: /opt/oper8/app/.git/logs/refs/heads
+              name: oper8-vcs-head
+            - mountPath: /opt/oper8/app/.git/worktrees
+              name: oper8-vcs-worktrees
+      serviceAccount: ibm-cpd-watsonx-ai-operator-serviceaccount
+      serviceAccountName: ibm-cpd-watsonx-ai-operator-serviceaccount
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - emptyDir: {}
+          name: home
+        - emptyDir: {}
+          name: tmp
+        - emptyDir: {}
+          name: oper8-vcs-head
+        - emptyDir: {}
+          name: oper8-vcs-logs-head
+        - emptyDir: {}
+          name: oper8-vcs-worktrees

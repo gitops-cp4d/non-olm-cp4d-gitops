@@ -1,0 +1,960 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: oper8
+    app.kubernetes.io/name: caikit
+    olm.managed: "true"
+    operator: caikit-runtime-stack-operator
+    operators.coreos.com/ibm-cpd-watsonx-ai.cpd-watsonx-ai: ""
+  name: caikitruntimestacks.caikit.org
+spec:
+  conversion:
+    strategy: None
+  group: caikit.org
+  names:
+    kind: CaikitRuntimeStack
+    listKind: CaikitRuntimeStackList
+    plural: caikitruntimestacks
+    shortNames:
+      - cais
+      - caistack
+      - caistacks
+    singular: caikitruntimestack
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - description: Version of the resource
+          jsonPath: .spec.version
+          name: Version
+          type: string
+        - description: Condition ready
+          jsonPath: .status.conditions[?(@.type=="Ready")].status
+          name: Ready
+          type: string
+        - description: Condition ready reason
+          jsonPath: .status.conditions[?(@.type=="Ready")].reason
+          name: ReadyReason
+          type: string
+        - description: Condition updating
+          jsonPath: .status.conditions[?(@.type=="Updating")].status
+          name: Updating
+          type: string
+        - description: Condition updating reason
+          jsonPath: .status.conditions[?(@.type=="Updating")].reason
+          name: UpdatingReason
+          type: string
+        - description: Fraction of deployed components
+          jsonPath: .status.componentStatus.deployed
+          name: Deployed
+          type: string
+        - description: Fraction of verified components
+          jsonPath: .status.componentStatus.verified
+          name: Verified
+          type: string
+        - description: Age of the resource
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          properties:
+            configOverrides:
+              description: Backend operator configuration overrides
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+            spec:
+              description: The specification for the Caikit Runtime Stack instance
+              properties:
+                datastores:
+                  description: Datastore configuration for connecting to external instances and/or configuring internal types
+                  properties:
+                    cos:
+                      additionalProperties:
+                        description: COS storage description
+                        properties:
+                          backupStorageClassName:
+                            description: The storage class used for saving COS backup. Defaults to a fileStorageClass if not specified
+                            type: string
+                          blockStorageClass:
+                            description: block storage class name to use for persistent volumes
+                            type: string
+                          connection:
+                            description: The set of input cos connection details
+                            properties:
+                              authSecretAccessKeyField:
+                                description: Field in the auth secret containing the access_key
+                                type: string
+                              authSecretName:
+                                description: Secret name containing the username_key and password_key
+                                type: string
+                              authSecretSecretKeyField:
+                                description: Field in the auth secret containing the secret_key
+                                type: string
+                              tlsSecretCertField:
+                                description: The field within the tls secret that holds the CA cert
+                                type: string
+                              tlsSecretName:
+                                description: The name of the secret holding the tls certificate (for mounting)
+                                type: string
+                              uriSecret:
+                                description: The secret holding the hostname and port
+                                type: string
+                              uriSecretBucketnameField:
+                                description: The field in the URI secret holding the bucketname
+                                type: string
+                              uriSecretHostnameField:
+                                description: The field in the URI secret holding the hostname
+                                type: string
+                              uriSecretPortField:
+                                description: The field in the URI secret holding the port
+                                type: string
+                            type: object
+                          credentials:
+                            description: Configuring credentials to the minio instances (optional)
+                            properties:
+                              secretName:
+                                description: Name of the k8s secret containing user provided credentials to the minio instance. The secret (if provided) has to contain the access key and secret key to connect to the minio. Note that if the secret is not provided then the access key and secret key is randomly generated.
+                                type: string
+                            type: object
+                          fileStorageClass:
+                            description: file storage class name to use for persistent volumes
+                            type: string
+                          storageSize:
+                            description: size of each volume
+                            type: string
+                          type:
+                            description: Type name for the storage factory to use
+                            type: string
+                        type: object
+                      description: Configuration for any S3 Cloud Object Storage instances
+                      type: object
+                    postgres:
+                      properties:
+                        backupStorageClassName:
+                          description: storage class name to use for persistent volumes
+                          type: string
+                        blockStorageClass:
+                          description: block storage class name to use for persistent volumes
+                          type: string
+                        connection:
+                          description: The set of input postgres connection details
+                          properties:
+                            authSecretName:
+                              description: Secret name containing the username_key and password_key
+                              type: string
+                            authSecretPasswordField:
+                              description: Field in the auth secret containing the password
+                              type: string
+                            authSecretUsernameField:
+                              description: Field in the auth secret containing the username
+                              type: string
+                            tlsSecretCertField:
+                              description: The field within the tls secret that holds the CA cert
+                              type: string
+                            tlsSecretName:
+                              description: The name of the secret holding the tls certificate (for mounting)
+                              type: string
+                            uriSecret:
+                              description: The secret holding the hostname and port
+                              type: string
+                            uriSecretHostnameField:
+                              description: The field in the URI secret holding the hostname
+                              type: string
+                            uriSecretPortField:
+                              description: The field in the URI secret holding the port
+                              type: string
+                          type: object
+                        credentials:
+                          description: Configuring credentials to the Postgres instances (optional)
+                          properties:
+                            secretName:
+                              description: Name of the k8s secret containing user provided credentials to the Postgres instance. The secret (if provided) contains in the password field the password that will be used by the superuser called postgres (the username cannot be changed). Note that if the secret is not provided then the password is randomly generated. Only alphanumeric characters are permitted in the password.
+                              type: string
+                          type: object
+                        fileStorageClass:
+                          description: file storage class name to use for persistent volumes
+                          type: string
+                        storageSize:
+                          description: size of each volume
+                          type: string
+                      type: object
+                    rabbitmq:
+                      properties:
+                        backupStorageClassName:
+                          description: storage class name to use for persistent volumes
+                          type: string
+                        blockStorageClass:
+                          description: block storage class name to use for persistent volumes
+                          type: string
+                        connection:
+                          description: The set of input rabbitmq connection details
+                          properties:
+                            authSecretName:
+                              description: Secret name containing the username_key and password_key
+                              type: string
+                            authSecretPasswordField:
+                              description: Field in the auth secret containing the password
+                              type: string
+                            authSecretUsernameField:
+                              description: Field in the auth secret containing the username
+                              type: string
+                            tlsSecretCertField:
+                              description: The field within the tls secret that holds the CA cert
+                              type: string
+                            tlsSecretName:
+                              description: The name of the secret holding the tls certificate (for mounting)
+                              type: string
+                            uriSecret:
+                              description: The secret holding the hostname and port
+                              type: string
+                            uriSecretHostnameField:
+                              description: The field in the URI secret holding the hostname
+                              type: string
+                            uriSecretPortField:
+                              description: The field in the URI secret holding the port
+                              type: string
+                          type: object
+                        credentials:
+                          description: Configuring credentials to the RabbitMQ instances (optional)
+                          properties:
+                            secretName:
+                              description: Name of the k8s secret containing user provided credentials to the RabbitMQ instance. The secret (if provided) must provide fields named 'username' and 'password'.
+                              type: string
+                          type: object
+                        fileStorageClass:
+                          description: file storage class name to use for persistent volumes
+                          type: string
+                        storageSize:
+                          description: size of each volume
+                          type: string
+                      type: object
+                    redis:
+                      properties:
+                        connection:
+                          description: The set of input postgres connection details
+                          properties:
+                            authSecretName:
+                              description: Secret name containing the username and password
+                              type: string
+                            authSecretPasswordField:
+                              description: Field in the auth secret containing the password
+                              type: string
+                            authSecretUsernameField:
+                              description: Field in the auth secret containing the username
+                              type: string
+                            hostname:
+                              description: Redis hostname
+                              type: string
+                            port:
+                              description: Redis port
+                              type: integer
+                            tlsSecretCertField:
+                              description: The field within the tls secret that holds the CA cert
+                              type: string
+                            tlsSecretName:
+                              description: The name of the secret holding the tls certificate (for mounting)
+                              type: string
+                          type: object
+                      type: object
+                  type: object
+                images:
+                  description: Container image configuration
+                  properties:
+                    containerImages:
+                      additionalProperties:
+                        description: Image config for the caikit runtime
+                        properties:
+                          name:
+                            description: Image name
+                            type: string
+                          namespaced:
+                            description: This image is scoped by the namespace in the container registry (for in-cluster)
+                            type: boolean
+                          registry:
+                            description: Non-default registry for image
+                            type: string
+                          version:
+                            description: Image version
+                            type: string
+                        type: object
+                      description: Individual container image overrides by name
+                      type: object
+                    imagePullSecrets:
+                      description: Image pull secrets to apply to all containers
+                      items:
+                        description: Image pull secret reference
+                        properties:
+                          name:
+                            description: The name of the object
+                            type: string
+                        type: object
+                      type: array
+                    namespaced:
+                      description: Indicator that images within the default registry are scoped by namespace
+                      type: boolean
+                    registry:
+                      description: The default registry to use for images
+                      type: string
+                  type: object
+                inference:
+                  description: Configuration for the Caikit inference stack
+                  properties:
+                    caikitDeployment:
+                      description: Inference stack using a collection of caikit runtime deployments
+                      properties:
+                        deployments:
+                          additionalProperties:
+                            description: Caikit deployment configuration
+                            properties:
+                              deploymentSpecOverrides:
+                                description: Arbitrary overrides merge into the deployment using Patch Strategic Merge
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                              entrypoint:
+                                description: Shell command to use as the container's entrypoint (will be split to form command)
+                                type: string
+                              env:
+                                additionalProperties:
+                                  type: string
+                                description: Additional key/value environment variables
+                                type: object
+                              grpcPort:
+                                description: The port to serve the grpc API on (0/null to disable gRPC)
+                                type: number
+                              headlessService:
+                                description: Deploy a headless service for the runtime in addition to the standard service
+                                type: boolean
+                              httpPort:
+                                description: The port to serve the http API on (0/null to disable HTTP)
+                                type: number
+                              imageEntry:
+                                description: Entry in spec.images to use for this deployment
+                                type: string
+                              localModelsMount:
+                                description: The mount configuration for the local_models_dir
+                                properties:
+                                  name:
+                                    description: Name of the PVC or COS entry to use for this mount
+                                    type: string
+                                  readOnly:
+                                    description: Whether or not the directory should be mounted as read only (defaults to True)
+                                    type: boolean
+                                  subPath:
+                                    description: Subdirectory within mount to use
+                                    type: string
+                                  type:
+                                    description: The type of mount to use (cos or pvc)
+                                    enum:
+                                      - cos
+                                      - pvc
+                                    type: string
+                                type: object
+                              metricsPort:
+                                description: The port to serve metrics on (0/null to disable metrics)
+                                type: number
+                              namespace:
+                                description: Namespace other than the one containing the CR to place deployment in
+                                type: string
+                              promptCacheMount:
+                                description: The mount configuration for the prompt cache
+                                properties:
+                                  name:
+                                    description: Name of the PVC or COS entry to use for this mount
+                                    type: string
+                                  subPath:
+                                    description: Subdirectory within mount to use
+                                    type: string
+                                  type:
+                                    description: The type of mount to use (cos or pvc)
+                                    enum:
+                                      - cos
+                                      - pvc
+                                    type: string
+                                type: object
+                              replicas:
+                                description: Initial number of replicas for the deployment
+                                type: number
+                              runtimeConfig:
+                                description: Arbitrary runtime config overrides to be mounted as a configmap
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                              storage:
+                                description: Configuration if using localModelsCOS
+                                properties:
+                                  autoCreateBucket:
+                                    description: Whether or not the bucket should be auto-created
+                                    type: boolean
+                                  storageClass:
+                                    description: The name of the s3fs storage class to use
+                                    type: string
+                                  storageProvisioner:
+                                    description: The name of the s3fs storage provisioner to use
+                                    type: string
+                                type: object
+                              tgisModelConnections:
+                                additionalProperties:
+                                  description: Hostname and TLS files to connect to a running TGIS service
+                                  properties:
+                                    caTlsCertField:
+                                      description: The field within the caTlsSecret holding the CA content
+                                      type: string
+                                    caTlsSecret:
+                                      description: The name of a secret holding the CA cert
+                                      type: string
+                                    clientTlsCertField:
+                                      description: The field within the clientTlsSecret holding the certificate content
+                                      type: string
+                                    clientTlsKeyField:
+                                      description: The field within the clientTlsSecret holding the secret key content
+                                      type: string
+                                    clientTlsSecret:
+                                      description: The name of a secret holding the client key/cert pair for mTLS
+                                      type: string
+                                    hostname:
+                                      description: Hostname (with port) for the running TGIS service
+                                      type: string
+                                  type: object
+                                description: Connection config for specific TGIS model connections
+                                type: object
+                              tgisTemplate:
+                                description: Connection config for extensible TGIS connections with a model_id template in the name\
+                                properties:
+                                  caTlsCertField:
+                                    description: The field within the caTlsSecret holding the CA content
+                                    type: string
+                                  caTlsSecret:
+                                    description: The name of a secret holding the CA cert
+                                    type: string
+                                  clientTlsCertField:
+                                    description: The field within the clientTlsSecret holding the certificate content
+                                    type: string
+                                  clientTlsKeyField:
+                                    description: The field within the clientTlsSecret holding the secret key content
+                                    type: string
+                                  clientTlsSecret:
+                                    description: The name of a secret holding the client key/cert pair for mTLS
+                                    type: string
+                                  grpcLoadBalancerPolicy:
+                                    description: gRPC Load balancer policy (https://github.com/grpc/grpc/blob/master/doc/load-balancing.md)
+                                    enum:
+                                      - pick_first
+                                      - round_robin
+                                      - grpclb
+                                    type: string
+                                  grpcLoadBalancerPollInterval:
+                                    description: Time (seconds) for the gRPC client to poll for load balancer connections
+                                    type: number
+                                  hostname:
+                                    description: Hostname (with port) for the running TGIS service
+                                    type: string
+                                type: object
+                              tgisTestConnections:
+                                description: Test connections to TGIS model servers while loading models
+                                type: boolean
+                            type: object
+                          description: Map of name -> deployment config
+                          type: object
+                      type: object
+                    enabled:
+                      description: Flag to turn the inference stack on/off
+                      type: boolean
+                    type:
+                      description: Indicator of the type of inference stack to use
+                      type: string
+                  type: object
+                orchestration:
+                  description: Configuration for the Caikit orchestration stack
+                  properties:
+                    enabled:
+                      description: Flag to turn the orchestration stack on/off
+                      type: boolean
+                  type: object
+                security:
+                  description: Configuration options for common securityContext configurations
+                  properties:
+                    mtls:
+                      description: Configuration for enabling mutual TLS in the user facing services
+                      properties:
+                        clientCert:
+                          description: Client cert to use. If not given, the default CA will be used.
+                          properties:
+                            base64Content:
+                              description: Directly encoded base64 content (mutually exclusive with secretName)
+                              type: string
+                            secretKey:
+                              description: 'Field name within the CA secret if using secretName (default: ca.pem)'
+                              type: string
+                            secretName:
+                              description: Name of a secret holding the CA (mutually exclusive with base64Content)
+                              type: string
+                          type: object
+                        enabled:
+                          description: Enable mutual TLS
+                          type: boolean
+                      type: object
+                    openshiftDefaults:
+                      description: Use the default locked down OpenShift securityContext
+                      type: boolean
+                    tls:
+                      description: Configuration for TLS service-to-service communication using external secrets. If using external secrets, both serverTlsSecret and clientTlsSecret are required, otherwise TLS values will be generated internally.
+                      properties:
+                        clientTlsCertField:
+                          description: The field within clientTlsSecret holding the CA cert
+                          type: string
+                        clientTlsSecret:
+                          description: Name of a secret holding the client CA cert for clients to use when querying servers
+                          type: string
+                        clientTlsSecretNamespace:
+                          description: Namespace where the clientTlsSecret lives (defaults to current)
+                          type: string
+                        serverTlsCertField:
+                          description: The field within serverTlsSecret holding the public cert
+                          type: string
+                        serverTlsKeyField:
+                          description: The field within serverTlsSecret holding the private key
+                          type: string
+                        serverTlsSecret:
+                          description: Name of a secret holding a key/cert pair for servers
+                          type: string
+                        serverTlsSecretNamespace:
+                          description: Namespace where the serverTlsSecret lives (defaults to current)
+                          type: string
+                      type: object
+                    tlsSubjectAlternateNames:
+                      description: Additional Subject Alternate Names to add to the TLS certificates for user-facing services
+                      items:
+                        type: string
+                      type: array
+                  type: object
+                training:
+                  description: Configuration for the Caikit training stack
+                  properties:
+                    enabled:
+                      description: Flag to turn the training stack on/off
+                      type: boolean
+                    modelTrain:
+                      description: Config when using Model Train for the training stack
+                      properties:
+                        caikitTrainShim:
+                          description: Config when using caikit model train shim
+                          properties:
+                            deploymentSpecOverrides:
+                              description: Arbitrary overrides merge into the deployment using Patch Strategic Merge
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                            env:
+                              additionalProperties:
+                                type: string
+                              description: Additional key/value environment variables
+                              type: object
+                            grpcPort:
+                              description: The port to serve the grpc API on
+                              type: number
+                            httpPort:
+                              description: The port to serve the http API on
+                              type: number
+                            metricsPort:
+                              description: The port to serve the runtime metrics on
+                              type: number
+                            namespace:
+                              description: Namespace other than the one containing the CR to deploy caikit API to
+                              type: string
+                            replicas:
+                              description: The number of replicas of the MT manager deployment to create
+                              type: number
+                            runtimeConfig:
+                              description: Arbitrary runtime config overrides to be mounted as a configmap
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                          type: object
+                        deploymentSpecOverrides:
+                          description: Arbitrary overrides merge into the deployment using Patch Strategic Merge
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                        gpuLimits:
+                          description: String representations of available GPU limits that this instance can use
+                          items:
+                            type: string
+                          type: array
+                        gpuNodeAnnotation:
+                          description: The annotation used to look for nodes with GPUs
+                          type: string
+                        lcmHostnameOverride:
+                          description: Hostname override for trainer and PC to use when communicating directly with LCM (required if external TLS does not contain a valid SAN match for the actual service hostname)
+                          nullable: true
+                          type: string
+                        namespace:
+                          description: Namespace other than the one containing the CR to deploy the MT control pods into
+                          type: string
+                        podCoordinatorHostnameOverride:
+                          description: Hostname override for LCM to use when communicating directly with PC (required if external TLS does not contain "localhost" as a valid SAN)
+                          type: string
+                        port:
+                          description: The port to serve frontend API calls on
+                          type: number
+                        queueSize:
+                          description: The size of the message queue to manage training jobs
+                          type: number
+                        replicas:
+                          description: The number of replicas of the MT manager deployment to create
+                          type: number
+                        serviceName:
+                          description: MT service name for caikit training workflow
+                          type: string
+                        storage:
+                          properties:
+                            autoCreateBucket:
+                              description: Whether or not the bucket should be auto-created
+                              type: boolean
+                            cosStorages:
+                              description: A list of the names of the cos datastore entries to mount
+                              items:
+                                type: string
+                              type: array
+                            storageClass:
+                              description: The name of the s3fs storage class to use
+                              type: string
+                            storageProvisioner:
+                              description: The name of the s3fs storage provisioner to use
+                              type: string
+                          type: object
+                        trainerHostnameOverride:
+                          description: Hostname override for LCM and PC to use when communicating directly with trainer (required if external TLS does not contain a valid SAN match for the actual service hostname)
+                          nullable: true
+                          type: string
+                        trainingTimeoutS:
+                          description: Max time a workflow container is allowed to work on training before it's considered dead (in seconds)
+                          type: number
+                        workflow:
+                          description: Config for the workflow deployment
+                          properties:
+                            deploymentSpecOverrides:
+                              description: Arbitrary overrides merge into the training deployment using Patch Strategic Merge
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                            env:
+                              additionalProperties:
+                                type: string
+                              description: Key/value environment variables for the workflow deployment
+                              type: object
+                            gpuType:
+                              description: Specific GPU label to target. Chooses first GPU from gpuLimits if not set.
+                              type: string
+                            name:
+                              description: MT workflow name for training workflow
+                              type: string
+                            namespace:
+                              description: Namespace other than the one containing the CR to deploy the MT workflow workers into
+                              type: string
+                            outputMount:
+                              description: Configuration for using a mounted volume as the location for saved output
+                              properties:
+                                name:
+                                  description: Name of the PVC or COS entry to use for this mount
+                                  type: string
+                                subPath:
+                                  description: Subdirectory within mount to use
+                                  type: string
+                                type:
+                                  description: The type of mount to use (cos or pvc)
+                                  enum:
+                                    - cos
+                                    - pvc
+                                  type: string
+                              type: object
+                            pvcMountPathLabels:
+                              additionalProperties:
+                                type: string
+                              description: Map of path prefixes to label selectors (e.g. foo=bar,baz=bat) for mounting auto-detected PVCs. Detected volumes will be mounted by their name under the given directory.
+                              type: object
+                            replicas:
+                              description: Number of replicas of the workflow server to create
+                              type: number
+                            resources:
+                              description: MT-style resource spec
+                              properties:
+                                cpu:
+                                  description: CPU requests (millicpus)
+                                  type: number
+                                cpu_limit:
+                                  description: CPU limits (millicpus)
+                                  type: number
+                                memory:
+                                  description: Memory requests (Mib)
+                                  type: number
+                                memory_limit:
+                                  description: Memory limits (Mib)
+                                  type: number
+                              type: object
+                            runtimeConfig:
+                              description: Arbitrary runtime config overrides to be mounted as a configmap
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                          type: object
+                      type: object
+                    ray:
+                      description: Config when using Ray for the training stack
+                      properties:
+                        caikitTrainApi:
+                          description: Config when using caikit model train shim
+                          properties:
+                            deploymentSpecOverrides:
+                              description: Arbitrary overrides merge into the deployment using Patch Strategic Merge
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                            env:
+                              additionalProperties:
+                                type: string
+                              description: Additional key/value environment variables
+                              type: object
+                            grpcPort:
+                              description: The port to serve the grpc API on
+                              type: number
+                            httpPort:
+                              description: The port to serve the http API on
+                              type: number
+                            metricsPort:
+                              description: The port to serve the runtime metrics on
+                              type: number
+                            namespace:
+                              description: Namespace other than the one containing the CR to deploy the caikit API into
+                              type: string
+                            replicas:
+                              description: The number of replicas of the caikit API server to create
+                              type: number
+                          type: object
+                        rayCluster:
+                          description: Configuration specs of one Ray cluster.
+                          properties:
+                            autoScaling:
+                              description: Auto-scaling options
+                              properties:
+                                enabled:
+                                  description: Whether to enable autoscaling of Ray workers
+                                  type: boolean
+                                idleTimeoutSeconds:
+                                  description: Number of seconds a worker is inactive before scaling down
+                                  type: integer
+                                maxWorkers:
+                                  description: Maximum workers the autoscaler can scale up to
+                                  type: integer
+                                minWorkers:
+                                  description: Minimum number of workers, can be 0!
+                                  type: integer
+                                upscalingMode:
+                                  description: Conservativ upscaling is rate-limited where the number of pending worker Pods <= number of worker pods running. Aggressive is not rate limited.
+                                  enum:
+                                    - Default
+                                    - Aggressive
+                                    - Conservative
+                                  type: string
+                              type: object
+                            faultTolerance:
+                              description: Enabling fault tolerance mode, which connects head node data store to an external Redis
+                              properties:
+                                enabled:
+                                  description: Whether to enable fault tolerance. If enabled, it will use the Redis info provided in the datastores section.
+                                  type: boolean
+                              type: object
+                            headGroupSpec:
+                              description: Specification for head node
+                              properties:
+                                env:
+                                  additionalProperties:
+                                    type: string
+                                  description: Additional key/value environment variables
+                                  type: object
+                                rayStartParams:
+                                  additionalProperties:
+                                    type: string
+                                  description: 'RayStartParams are the params of the start command: node-manager-port, object-store-memory, ...'
+                                  type: object
+                              type: object
+                            specOverrides:
+                              description: Arbitrary overrides merge into the deployment using Patch Strategic Merge
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                            workerGroupSpecs:
+                              properties:
+                                env:
+                                  additionalProperties:
+                                    type: string
+                                  description: Additional key/value environment variables
+                                  type: object
+                                rayStartParams:
+                                  additionalProperties:
+                                    type: string
+                                  description: 'RayStartParams are the params of the start command: node-manager-port, object-store-memory, ...'
+                                  type: object
+                              type: object
+                          type: object
+                        storage:
+                          properties:
+                            autoCreateBucket:
+                              description: Whether or not the bucket should be auto-created
+                              type: boolean
+                            baseModelsMount:
+                              description: The mount configuration for the local models
+                              properties:
+                                name:
+                                  description: Name of the PVC or COS entry to use for this mount
+                                  type: string
+                                subPath:
+                                  description: Subdirectory within mount to use
+                                  type: string
+                                type:
+                                  description: The type of mount to use (cos or pvc)
+                                  enum:
+                                    - cos
+                                    - pvc
+                                  type: string
+                              type: object
+                            storageClass:
+                              description: The name of the s3fs storage class to use
+                              type: string
+                            storageProvisioner:
+                              description: The name of the s3fs storage provisioner to use
+                              type: string
+                            trainingOutputMount:
+                              description: The mount configuration for the training cache
+                              properties:
+                                name:
+                                  description: Name of the PVC or COS entry to use for this mount
+                                  type: string
+                                subPath:
+                                  description: Subdirectory within mount to use
+                                  type: string
+                                type:
+                                  description: The type of mount to use (cos or pvc)
+                                  enum:
+                                    - cos
+                                    - pvc
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                    type:
+                      description: Indicator of the type of training stack to use
+                      type: string
+                  type: object
+                version:
+                  description: The version of the operand to deploy
+                  type: string
+              type: object
+            status:
+              description: In-cluster status for the instance
+              properties:
+                componentStatus:
+                  description: The status of the individual managed components
+                  properties:
+                    allComponents:
+                      description: The names of all managed components
+                      items:
+                        type: string
+                      type: array
+                    deployed:
+                      description: Fraction of components which have completed the deploy phase
+                      type: string
+                    deployedComponents:
+                      description: The names of all managed components which have completed the deploy phase
+                      items:
+                        type: string
+                      type: array
+                    failedComponents:
+                      description: The names of all managed components which have encountered an unexpected error during deploy or verify
+                      items:
+                        type: string
+                      type: array
+                    unverifiedComponents:
+                      description: The names of all managed components which have not yet completed the verify phase
+                      items:
+                        type: string
+                      type: array
+                    verified:
+                      description: Fraction of components which have completed the verify phase
+                      type: string
+                  type: object
+                conditions:
+                  description: Orthogonal status conditions of the resource
+                  items:
+                    oneOf:
+                      - required:
+                          - type
+                          - lastTransactionTime
+                          - message
+                          - status
+                      - required:
+                          - type
+                          - lastTransitionTime
+                          - ansibleResult
+                    properties:
+                      ansibleResult:
+                        description: The ansible playbook result conditions
+                        properties:
+                          changed:
+                            type: number
+                          failures:
+                            type: number
+                          ok:
+                            type: number
+                          skipped:
+                            type: number
+                        type: object
+                      lastTransactionTime:
+                        description: The last time this condition was updated
+                        type: string
+                      lastTransitionTime:
+                        description: The last time the result changed
+                        type: string
+                      message:
+                        description: Plain text message describing the state
+                        type: string
+                      reason:
+                        description: Reason code describing the state
+                        type: string
+                      status:
+                        description: Boolean string indicating state
+                        enum:
+                          - "True"
+                          - "False"
+                        type: string
+                      type:
+                        description: The label for the condition type
+                        type: string
+                    type: object
+                  type: array
+                operatorVersion:
+                  description: The version of the operator
+                  type: string
+                versions:
+                  description: Information about versions of the operand
+                  properties:
+                    available:
+                      description: Information about available versions
+                      properties:
+                        versions:
+                          description: List of available version objects
+                          items:
+                            properties:
+                              name:
+                                description: The name of the version
+                                type: string
+                            required:
+                              - name
+                            type: object
+                          type: array
+                      required:
+                        - versions
+                      type: object
+                    reconciled:
+                      description: The currently reconciled version of the operand
+                      type: string
+                  type: object
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

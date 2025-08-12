@@ -1,0 +1,120 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/instance: notebookruntime
+    app.kubernetes.io/managed-by: ibm-cpd-ws-runtimes-operator
+    app.kubernetes.io/name: ibm-cpd-ws-runtimes
+    icpdsupport/addOnId: ws
+    olm.managed: "true"
+    operators.coreos.com/ibm-cpd-ws-runtimes.swhub-operator: ""
+  name: notebookruntimes.ws.cpd.ibm.com
+spec:
+  conversion:
+    strategy: None
+  group: ws.cpd.ibm.com
+  names:
+    kind: NotebookRuntime
+    listKind: NotebookRuntimeList
+    plural: notebookruntimes
+    shortNames:
+      - nbrt
+      - nbrts
+    singular: notebookruntime
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - description: Whether NLP models are installed
+          jsonPath: .spec.install_nlp_models
+          name: NLP Models
+          type: boolean
+        - description: The desired version of the runtime
+          jsonPath: .spec.version
+          name: Version
+          type: string
+        - description: The current version of the runtime
+          jsonPath: .status.versions.reconciled
+          name: Reconciled
+          type: string
+        - description: The status of the runtime
+          jsonPath: .status.runtimeStatus
+          name: Status
+          type: string
+        - description: Progress percentage
+          jsonPath: .status.progress
+          name: Percent
+          type: string
+        - description: The age of the runtime
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1beta1
+      schema:
+        openAPIV3Schema:
+          description: NotebookRuntime is the schema for the NotebookRuntimes API
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: |
+                * version: The desired version of the notebook runtime.
+                * kind: The language and version of the notebook runtime. Must be the same as the name and match 'ibm-cpd-ws-runtime-*'. Cannot be updated.
+                * ignoreForMaintenance: Set to 'true' to pause operator reconcilation for the notebook runtime.
+                * shutdown: Whether the notebook runtime is shut down. Possible values are 'false' (default), 'true', and 'force'.
+              properties:
+                ignoreForMaintenance:
+                  type: boolean
+                install_nlp_models:
+                  type: boolean
+                kind:
+                  pattern: ^ibm-cpd-ws-runtime-.*$
+                  type: string
+                shutdown:
+                  pattern: ^(false|true|force)$
+                  type: string
+                version:
+                  default: 11.0.0
+                  type: string
+              required:
+                - kind
+                - version
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+            status:
+              description: |
+                * runtimeStatus: The observed status of the notebook runtime
+                * reconciled: The current version of the notebook runtime
+                * progress: The progress of the current reconciliation
+                * progressMessage: The message of the current operation
+                * reconcileHistory: The history of reconciliation failures
+              properties:
+                progress:
+                  type: string
+                progressMessage:
+                  type: string
+                reconcileHistory:
+                  items:
+                    type: string
+                  type: array
+                runtimeStatus:
+                  type: string
+                versions:
+                  properties:
+                    reconciled:
+                      type: string
+                  required:
+                    - reconciled
+                  type: object
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

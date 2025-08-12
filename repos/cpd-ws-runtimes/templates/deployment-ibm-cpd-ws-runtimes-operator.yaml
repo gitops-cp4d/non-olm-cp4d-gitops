@@ -1,0 +1,131 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibm-cpd-ws-runtimes-operator
+  namespace: {{ .Values.global.operatorNamespace }}
+  labels:
+    app.kubernetes.io/instance: ibm-cpd-ws-runtimes-operator
+    app.kubernetes.io/managed-by: ibm-cpd-ws-runtimes-operator
+    app.kubernetes.io/name: ibm-cpd-ws-runtimes
+    app.kubernetes.io/version: 11.0.0021
+    control-plane: ibm-cpd-ws-runtimes-operator
+    icpdsupport/addOnId: ws
+    icpdsupport/app: operator
+    icpdsupport/module: ibm-cpd-ws-runtimes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: ibm-cpd-ws-runtimes-operator
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        cloudpakId: eb9998dcc5d24e3eb5b6fb488f750fe2
+        cloudpakName: IBM Cloud Pak for Data
+        productID: eb9998dcc5d24e3eb5b6fb488f750fe2
+        productMetric: FREE
+        productName: IBM Watson Studio
+        productVersion: 11.0.0
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: ibm-cpd-ws-runtimes-operator
+        app.kubernetes.io/managed-by: ibm-cpd-ws-runtimes-operator
+        app.kubernetes.io/name: ibm-cpd-ws-runtimes
+        app.kubernetes.io/version: 11.0.0021
+        control-plane: ibm-cpd-ws-runtimes-operator
+        icpdsupport/addOnId: ws
+        icpdsupport/app: operator
+        icpdsupport/module: ibm-cpd-ws-runtimes
+        intent: projected
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+                      - ppc64le
+                      - s390x
+      automountServiceAccountToken: true
+      containers:
+        - args:
+            - --reconcile-period
+            - $(RECONCILE_PERIOD)
+            - --zap-log-level
+            - $(LOG_LEVEL)
+            - --zap-time-encoding
+            - rfc3339
+            - --max-concurrent-reconciles
+            - "3"
+          env:
+            - name: ANSIBLE_VERBOSITY
+              value: "0"
+            - name: RECONCILE_PERIOD
+              value: 24h
+            - name: LOG_LEVEL
+              value: error
+            - name: OPERATOR_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                  key: namespaces
+                  name: namespace-scope
+                  optional: true
+          image: icr.io/cpopen/ibm-cpd-ws-runtimes-operator@sha256:51e7f4bab79f29d7219eece43a1f739c3f894a55114e19e465a97b166b1da6d2
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 6789
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          name: manager
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 6789
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: 500m
+              ephemeral-storage: 512Mi
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              ephemeral-storage: 256Mi
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp-dir
+            - mountPath: /opt/ansible/.ansible/tmp
+              name: ansible-tmp-dir
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: ibm-cpd-ws-runtimes-operator-sa
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 128Mi
+          name: tmp-dir
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 128Mi
+          name: ansible-tmp-dir

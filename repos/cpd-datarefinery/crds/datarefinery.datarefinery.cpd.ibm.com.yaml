@@ -1,0 +1,119 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/instance: ibm-datarefinery-instance1
+    app.kubernetes.io/managed-by: ansible
+    app.kubernetes.io/name: ibm-datarefinery
+    olm.managed: "true"
+    operators.coreos.com/ibm-cpd-datarefinery.cpd-datarefinery: ""
+  name: datarefinery.datarefinery.cpd.ibm.com
+spec:
+  conversion:
+    strategy: None
+  group: datarefinery.cpd.ibm.com
+  names:
+    kind: DataRefinery
+    listKind: DataRefineryList
+    plural: datarefinery
+    singular: datarefinery
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - description: The desired version of DataRefinery
+          jsonPath: .spec.version
+          name: Version
+          type: string
+        - description: The actual version of DataRefinery
+          jsonPath: .status.versions.reconciled
+          name: Reconciled
+          type: string
+        - description: The status of DataRefinery
+          jsonPath: .status.datarefineryStatus
+          name: Status
+          type: string
+        - description: Progress percentage
+          jsonPath: .status.progress
+          name: Percent
+          type: string
+        - description: The age of DataRefinery
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1beta1
+      schema:
+        openAPIV3Schema:
+          description: DataRefinery is the Schema for the datarefinery API
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: Spec defines the desired state of DataRefinery
+              properties:
+                autoScaleConfig:
+                  default: false
+                  type: boolean
+                blockStorageClass:
+                  type: string
+                docker_registry_prefix:
+                  default: cp.icr.io/cp/cpd
+                  type: string
+                fileStorageClass:
+                  type: string
+                ignoreForMaintenance:
+                  default: false
+                  type: boolean
+                license:
+                  properties:
+                    accept:
+                      type: boolean
+                    license:
+                      pattern: ^(Enterprise|Standard)$
+                      type: string
+                  required:
+                    - accept
+                    - license
+                  type: object
+                scaleConfig:
+                  pattern: ^(small_mincpureq|small|medium|large)$
+                  type: string
+                shutdown:
+                  pattern: ^(false|true|force)$
+                  type: string
+                storageClass:
+                  type: string
+                storageVendor:
+                  pattern: ^(ocs||portworx)$
+                  type: string
+                version:
+                  type: string
+              required:
+                - license
+              x-kubernetes-preserve-unknown-fields: true
+            status:
+              description: |
+                * datarefineryStatus: The observed status of DataRefinery
+                * reconciled: The current version of DataRefinery
+              properties:
+                datarefineryStatus:
+                  type: string
+                versions:
+                  properties:
+                    reconciled:
+                      type: string
+                  required:
+                    - reconciled
+                  type: object
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
