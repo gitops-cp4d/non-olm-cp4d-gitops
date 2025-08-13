@@ -3,7 +3,7 @@ entries:
   cpd-platform:
   - apiVersion: v2
     appVersion: 5.2.0
-    created: "2025-08-13T12:52:04.846133+10:00"
+    created: "2025-08-13T12:59:17.926013+10:00"
     description: A Helm chart for Kubernetes
     digest: aff60dd61241863725ae724e33045043ae193f9d277c185e81adbe82ca48b74d
     name: cpd-platform
@@ -14,7 +14,7 @@ entries:
   cpd-platform-cluster-scoped:
   - apiVersion: v2
     appVersion: 5.2.0
-    created: "2025-08-13T12:52:04.848002+10:00"
+    created: "2025-08-13T12:59:17.926455+10:00"
     description: A Helm chart for Kubernetes
     digest: cf242be3c0bc8df4454e08509c98f8e3d4901b550b6d9318c25cfaaa3840cf26
     name: cpd-platform-cluster-scoped
@@ -30,7 +30,7 @@ entries:
       versionOperator-2: 4.5.1
     apiVersion: v2
     appVersion: 4.13.0
-    created: "2025-08-13T12:52:04.848282+10:00"
+    created: "2025-08-13T12:59:17.927124+10:00"
     description: A Helm chart for ibm-common-service-operator and ibm-odlm namespace
       scoped resources
     digest: 2957f7caad4a729a9c17cb21c7ba558b60db396f26e77100e40ef7b8d85a2eec
@@ -47,7 +47,7 @@ entries:
       versionOperator-2: 4.5.1
     apiVersion: v2
     appVersion: 4.13.0
-    created: "2025-08-13T12:52:04.849803+10:00"
+    created: "2025-08-13T12:59:17.928919+10:00"
     description: A Helm chart for ibm-common-service-operator and ibm-odlm cluster
       scoped resources
     digest: c1c641fcbed06371fde34e73fa8e40ad54f58c7a5830d146a1fc2075b170576a
@@ -64,7 +64,7 @@ entries:
       versionOperator-2: 4.9.0
     apiVersion: v2
     appVersion: 4.12.0
-    created: "2025-08-13T12:52:04.850194+10:00"
+    created: "2025-08-13T12:59:17.929372+10:00"
     description: A Helm chart for ibm-iam-operator and ibm-commonui-operator namespace
       scoped resources
     digest: 3b698f8135ed02b4793195458a3b54d9a0c57453cc303554a9da636582e2ef6e
@@ -83,7 +83,7 @@ entries:
       versionOperator-2: 4.9.0
     apiVersion: v2
     appVersion: 4.12.0
-    created: "2025-08-13T12:52:04.850603+10:00"
+    created: "2025-08-13T12:59:17.929708+10:00"
     description: A Helm chart for ibm-iam-operator and ibm-commonui-operator cluster
       scoped resources
     digest: ff40332398ad1ba4a89a642534eb98835c8e57e94c111e43a475e2ad4425abfb
@@ -96,7 +96,7 @@ entries:
     version: 4.12.0+20250527.133754.0
   ibm-licensing-cluster-scoped:
   - apiVersion: v2
-    created: "2025-08-13T12:52:04.851001+10:00"
+    created: "2025-08-13T12:59:17.930114+10:00"
     description: A Helm chart for IBM License Service installation
     digest: 6211084338421a73d74f81f2737a34a8c853801208c91f7c1796b169f2114a9a
     name: ibm-licensing-cluster-scoped
@@ -107,7 +107,7 @@ entries:
   planning-analytics:
   - apiVersion: v2
     appVersion: 5.2.0
-    created: "2025-08-13T12:52:04.851385+10:00"
+    created: "2025-08-13T12:59:17.930391+10:00"
     description: A Helm chart for IBM Planning Analytics
     digest: a481d282fd2093c8100aa791e158e8af66ce7b3d1c45778aafe937812d3ffaab
     name: planning-analytics
@@ -117,7 +117,17 @@ entries:
     version: 5.2.0+20250604.210250.1608.dev
   - apiVersion: v2
     appVersion: 5.2.0
-    created: "2025-08-13T12:52:04.851711+10:00"
+    created: "2025-08-13T12:59:17.93067+10:00"
+    description: A Helm chart for IBM Planning Analytics
+    digest: b85a8e6436f1f35d4523a10651cae7502adc4d6f255043386c3bb74727682853
+    name: planning-analytics
+    type: application
+    urls:
+    - https://gitops-cp4d.github.io/non-olm-cp4d-gitops/repos/planning-analytics-5.2.0+20250604.210250.1608.split.tgz
+    version: 5.2.0+20250604.210250.1608.split
+  - apiVersion: v2
+    appVersion: 5.2.0
+    created: "2025-08-13T12:59:17.931041+10:00"
     description: A Helm chart for IBM Planning Analytics
     digest: 5afb1de73b96442db9ded433dbabbf05b2e72b6a5b15483a945fbec17a6a408b
     name: planning-analytics
@@ -128,7 +138,7 @@ entries:
   planning-analytics-cluster-scoped:
   - apiVersion: v2
     appVersion: 5.2.0
-    created: "2025-08-13T12:52:04.851967+10:00"
+    created: "2025-08-13T12:59:17.931324+10:00"
     description: A Helm chart for Cluster Scoped objects for planning_analytics
     digest: 2682faa724235b848b7a5490a61299c21bd2ec01d9799040a3fee3787f23340c
     name: planning-analytics-cluster-scoped
@@ -139,7 +149,7 @@ entries:
   platform-config:
   - apiVersion: v2
     appVersion: 5.2.0
-    created: "2025-08-13T12:52:04.85224+10:00"
+    created: "2025-08-13T12:59:17.931639+10:00"
     description: A Helm chart for Kubernetes
     digest: 0d23c7e7d24de42076237e485c1621b1a644c02397d9f31fe60b8eaebdf7360d
     name: platform-config
@@ -150,7 +160,7 @@ entries:
   postgresql:
   - apiVersion: v2
     appVersion: 1.25.1
-    created: "2025-08-13T12:52:04.853383+10:00"
+    created: "2025-08-13T12:59:17.93297+10:00"
     description: EDB Postgres for Kubernetes Helm Chart
     digest: 3dc893d4069aaf039d4b1bf57091fc322fca8672054313021bb578096258664d
     icon: https://www.enterprisedb.com/themes/custom/edb_bootstrap_sass/edb-logo-disc-dark-2.svg
@@ -164,7 +174,7 @@ entries:
   postgresql-cluster-scoped:
   - apiVersion: v2
     appVersion: 1.25.1
-    created: "2025-08-13T12:52:04.857355+10:00"
+    created: "2025-08-13T12:59:17.937446+10:00"
     description: A Helm chart for Postgresql Cluster Scope
     digest: 1d1b8d546f3b9e3f3f846da93bc81f751e687163d7147a818a0f4b010cedfb9a
     icon: https://www.enterprisedb.com/themes/custom/edb_bootstrap_sass/edb-logo-disc-dark-2.svg
@@ -178,7 +188,7 @@ entries:
   zen:
   - apiVersion: v2
     appVersion: 6.2.0
-    created: "2025-08-13T12:52:04.857753+10:00"
+    created: "2025-08-13T12:59:17.938006+10:00"
     description: A Helm chart for Kubernetes
     digest: 1bc17041b344048f2b58a0dac01b79034b8370ebe6f97997caaba910772d8f88
     name: zen
@@ -189,7 +199,7 @@ entries:
   zen-cluster-scoped:
   - apiVersion: v2
     appVersion: 6.2.0
-    created: "2025-08-13T12:52:04.858025+10:00"
+    created: "2025-08-13T12:59:17.938269+10:00"
     description: A Helm chart for Kubernetes
     digest: 5e2347b8dede9a166f2cd5a73bf17a568ec185aaf6d052ca5667bf398d81ef09
     name: zen-cluster-scoped
@@ -197,4 +207,4 @@ entries:
     urls:
     - https://gitops-cp4d.github.io/non-olm-cp4d-gitops/repos/zen-cluster-scoped-6.2.0+20250530.152516.232.tgz
     version: 6.2.0+20250530.152516.232
-generated: "2025-08-13T12:52:04.845357+10:00"
+generated: "2025-08-13T12:59:17.925076+10:00"
