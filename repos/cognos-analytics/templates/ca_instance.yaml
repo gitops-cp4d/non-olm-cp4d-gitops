@@ -6,9 +6,11 @@ metadata:
 spec:
   license:
     accept: true
+  installCCS: false
   fileStorageClass: {{ .Values.global.fileStorageClass }}
   blockStorageClass: {{ .Values.global.blockStorageClass }}
   # storageClass: {{ .Values.global.fileStorageClass }}
   # storageVendor: ocs
   version: 28.0.0
+
 
