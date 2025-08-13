@@ -59,7 +59,7 @@ find "$PROJECT_ROOT" \( -name "*.yaml" -o -name "*.yml" \) | while read -r file;
   for kv in "${kvs[@]}"; do
     k="${kv%%=*}"
     v="${kv#*=}"
-    perl -pi -e "s|\\\${$k}|$v|g" "$file"
+    perl -pi -e "s#\\\${$k}#$v#g" "$file"
   done
 done
 
