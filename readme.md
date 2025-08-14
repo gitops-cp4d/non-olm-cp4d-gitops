@@ -65,7 +65,14 @@ If you are using a [Techzone environment](https://techzone.ibm.com/collection/te
 
 5. Any further changes (including enabling/disabling cartridges by commenting/uncommenting their resources in `kustomization.yaml` after Software Hub installation is completed) should be committed and pushed to your Git repository directly. ArgoCD will automatically detect and synchronize all changes from Git.
 
+6. Installation will likely take over 1 hours or more depending on the number of services enabled
 
+7. To access the platform the following commands can be used to get the route, username and password.
+    ```
+    oc get route cpd -n <instance-namespace> -o jsonpath='{.spec.host}'
+    oc get secret platform-auth-idp-credentials -n <instance-namespace> -o jsonpath='{.data.admin_username}' | base64 --decode && echo
+    oc get secret platform-auth-idp-credentials -n <instance-namespace> -o jsonpath='{.data.admin_password}' | base64 --decode && echo
+    ```
 ## Development Guide
 
 - You are welcome to contribute more dependencies or cartridges. Please follow the existing layered directory structure for expansion.
