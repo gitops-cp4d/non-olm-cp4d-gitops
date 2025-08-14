@@ -55,7 +55,6 @@ If you are using a [Techzone environment](https://techzone.ibm.com/collection/te
     ```
     This script will:
     - Check the OpenShift environment and prerequisites
-    - Update the Git repository address for Argo application manifest
     - Process and substitute all parameters in manifests
     - Push the updated manifests to the remote repository
     - Apply bootstrap manifests (such as namespaces, RBAC for Argo, health-checks)
@@ -63,16 +62,24 @@ If you are using a [Techzone environment](https://techzone.ibm.com/collection/te
     - Apply the top-level ArgoCD Application (`cp4d-gitops.yaml`)
     - Output ArgoCD dashboard login information
 
-5. Any further changes (including enabling/disabling cartridges by commenting/uncommenting their resources in `kustomization.yaml` after Software Hub installation is completed) should be committed and pushed to your Git repository directly. ArgoCD will automatically detect and synchronize all changes from Git.
+5. After the basic Software Hub Platform (`1-cluster-scope/` and `2-namespace-scope/` resouces) installation completes, the credentials and URL can be retrieved by:
+    - Retrieving from Argo CD dashboard:
+    Open the `post-cpd-print-creds` Job under the `post-installation` Application and view its logs.
+    - Retrieving with `oc` command: 
+    please replace `<instanceNS>` with the same values from values.yaml
+        ```
+        oc logs job/post-cpd-print-creds -n <instanceNS>
+        ```
+        or
+        ```
+        oc get route cpd -n <instanceNS> -o jsonpath='{.spec.host}'
+        oc get secret platform-auth-idp-credentials -n <instanceNS> -o jsonpath='{.data.admin_username}' | base64 --decode && echo
+        oc get secret platform-auth-idp-credentials -n <instanceNS> -o jsonpath='{.data.admin_password}' | base64 --decode && echo
+        ```
 
-6. Installation will likely take over 1 hours or more depending on the number of services enabled
+6. Any further changes (including enabling/disabling cartridges by commenting/uncommenting their resources in `kustomization.yaml` after Software Hub installation is completed) should be committed and pushed to your Git repository directly. ArgoCD will automatically detect and synchronize all changes from Git. Installation will likely take over 1 hours or more depending on the number of services enabled
 
-7. To access the platform the following commands can be used to get the route, username and password.
-    ```
-    oc get route cpd -n <instance-namespace> -o jsonpath='{.spec.host}'
-    oc get secret platform-auth-idp-credentials -n <instance-namespace> -o jsonpath='{.data.admin_username}' | base64 --decode && echo
-    oc get secret platform-auth-idp-credentials -n <instance-namespace> -o jsonpath='{.data.admin_password}' | base64 --decode && echo
-    ```
+
 ## Development Guide
 
 - You are welcome to contribute more dependencies or cartridges. Please follow the existing layered directory structure for expansion.
