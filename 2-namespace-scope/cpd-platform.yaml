@@ -3,6 +3,9 @@ kind: Application
 metadata:
   name: cpd-platform-${appSuffix}
   namespace: ${argocdNS}
+  labels:
+    scope: namespace
+    product: software-hub
 spec:
   destination:
     name: ''
