@@ -3,6 +3,9 @@ kind: Application
 metadata:
   name: ccs-cluster-${appSuffix}
   namespace: ${argocdNS}
+  labels:
+    scope: cluster
+    product: cognos-analytics
 spec:
   destination:
     name: ''

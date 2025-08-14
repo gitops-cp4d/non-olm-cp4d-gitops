@@ -3,6 +3,9 @@ kind: Application
 metadata:
   name: db2aaservice-cluster-${appSuffix}
   namespace: ${argocdNS}
+  labels:
+    scope: cluster
+    product: openpages
 spec:
   destination:
     name: ''

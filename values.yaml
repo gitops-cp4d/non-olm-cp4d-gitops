@@ -3,7 +3,7 @@ global:
   argoSourceRepoURL: https://github.com/gitops-cp4d/non-olm-cp4d-gitops.git
 
   operatorNS: gitops-operator
-  instanceNS: ${instanceNS}
+  instanceNS: gitops-instance
   licensingNS: gitops-licensing
   appSuffix: gitops
   fileStorageClass: ocs-external-storagecluster-cephfs

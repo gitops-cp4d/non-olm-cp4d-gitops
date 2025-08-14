@@ -3,6 +3,9 @@ kind: Application
 metadata:
   name: postgresql-cluster-${appSuffix}
   namespace: ${argocdNS}
+  labels:
+    scope: cluster
+    product: software-hub
 spec:
   syncPolicy:
     automated:
