@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: non-olm-cp4d
-  namespace: openshift-gitops
+  namespace: ${argocdNS}
 spec:
   project: default
   source:
@@ -12,7 +12,7 @@ spec:
     kustomize: {}
   destination:
     server: https://kubernetes.default.svc
-    namespace: openshift-gitops
+    namespace: ${argocdNS}
   syncPolicy:
     automated:
       prune: true 

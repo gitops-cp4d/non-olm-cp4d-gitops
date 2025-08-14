@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: post-installation-${appSuffix}
+  namespace: ${argocdNS}
+spec:
+  destination:
+    namespace: ${instanceNS}
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: ${argoSourceRepoURL}
+    targetRevision: main
+    path: 9-post-installation
+    kustomize: {}
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
