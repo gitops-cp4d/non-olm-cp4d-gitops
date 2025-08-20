@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: ibm-cpd-ws-runtimes-operator-sa
-  namespace: {{ .Values.global.instanceNamespace }}
+  namespace: {{ .Values.global.instanceNS }}
 rules:
   - apiGroups:
       - ""

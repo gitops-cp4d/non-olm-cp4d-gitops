@@ -1,6 +1,6 @@
 global:
-  operatorNamespace: "{{ .Values.global.operatorNS }}"     
-  instanceNamespace: "{{ .Values.global.instanceNS }}"                   
+  operatorNS: "{{ .Values.global.operatorNS }}"     
+  instanceNS: "{{ .Values.global.instanceNS }}"                   
   blockStorageClass: "{{ .Values.global.blockStorageClass }}"
   fileStorageClass: "{{ .Values.global.fileStorageClass }}"
 

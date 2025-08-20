@@ -1,6 +1,6 @@
 global:
-  operatorNamespace: ""     
-  instanceNamespace: ""                   
+  operatorNS: ""     
+  instanceNS: ""                   
   blockStorageClass: ""
   fileStorageClass: ""
 
