@@ -1,0 +1,16 @@
+apiVersion: watsonxai.cpd.ibm.com/v1beta1
+kind:  Watsonxai
+metadata:
+  name: watsonxai-cr
+  namespace: {{ .Values.global.instanceNS }}
+  labels:
+    icpdsupport/addOnId: watsonx_ai
+    app.kubernetes.io/instance: watsonxai-cr
+    app.kubernetes.io/name: watsonx_ai
+spec:
+  license:
+    accept: true
+    license: Enterprise
+  fileStorageClass: {{ .Values.global.fileStorageClass }}
+  blockStorageClass: {{ .Values.global.blockStorageClass }}
+  version: 11.0.0
