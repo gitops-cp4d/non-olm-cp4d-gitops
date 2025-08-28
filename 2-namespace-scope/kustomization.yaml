@@ -6,4 +6,4 @@ resources:
   - postgresql.yaml
   - zen.yaml
   - rh-cm.yaml
-  - post-installation.yaml
+  # - post-installation.yaml
