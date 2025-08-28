@@ -20,4 +20,9 @@ spec:
       valuesObject:
         global:
           operatorNamespace: {{ .Values.global.operatorNS }}
+        webhook:
+          mutating:
+            create: false
+          validating:
+            create: false
   project: default
