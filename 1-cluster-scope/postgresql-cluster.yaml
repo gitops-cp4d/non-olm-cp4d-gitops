@@ -27,4 +27,9 @@ spec:
       valuesObject:
         global:
           operatorNamespace: ${operatorNS}
+        webhook:
+          mutating:
+            create: false
+          validating:
+            create: false
   project: default
