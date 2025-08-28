@@ -28,7 +28,7 @@ global:
     version: 5.2.0+20250604.210250.1608
   postgresql-cluster:
     chart: postgresql-cluster-scoped
-    version: 5.16.0+20250422.134042.20
+    version: 5.17.0+20250618.084143.22
   zen-cluster:
     chart: zen-cluster-scoped
     version: 6.2.0+20250530.152516.232
@@ -44,7 +44,7 @@ global:
     version: 4.12.0+20250527.133754.0
   postgresql:
     chart: postgresql
-    version: 5.16.0+20250422.134042.20
+    version: 5.17.0+20250618.084143.22
   zen:
     chart: zen
     version: 6.2.0+20250517.171311.226
