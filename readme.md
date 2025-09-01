@@ -32,11 +32,19 @@ This project aims to automated the Non-OLM installation method for CP4D and Cart
 - ibm-rabbitmq-operator
 - ibm-db2uoperator
 - ibm-db2aaservice
+- cpd-datarefinery.yaml
+- cpd-wml.yaml
+- cpd-ws-runtimes.yaml
+- cpd-wsl.yaml
+- opensearch.yaml
+- watsonx-ai-ifm.yaml
+- watsonx-ai.yaml
 
 #### Newly Added Cartridges
 
 - OpenPages
 - Cognos Analytics
+- watsonx.ai
 
 ## Usage
 
@@ -78,6 +86,8 @@ If you are using a [Techzone environment](https://techzone.ibm.com/collection/te
         ```
 
 6. Any further changes (including enabling/disabling cartridges by commenting/uncommenting their resources in `kustomization.yaml` after Software Hub installation is completed) should be committed and pushed to your Git repository directly. ArgoCD will automatically detect and synchronize all changes from Git. Installation will likely take over 1 hours or more depending on the number of services enabled
+
+7. To enable watsonx.ai, please make sure you have done the prerequisite for watsonx.ai https://www.ibm.com/docs/en/software-hub/5.2.x?topic=cluster-installing-prerequisite-software, and uncommenting the resource `3-cartridge/watsonx-ai` in `kustomization.yaml` to start the synchronisation of watsonx.ai resources.
 
 
 ## Development Guide
