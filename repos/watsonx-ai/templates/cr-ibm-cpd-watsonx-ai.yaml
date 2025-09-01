@@ -10,7 +10,7 @@ metadata:
 spec:
   license:
     accept: true
-    license: Enterprise
+  tuning_disabled: true
   fileStorageClass: {{ .Values.global.fileStorageClass }}
   blockStorageClass: {{ .Values.global.blockStorageClass }}
   version: 11.0.0
