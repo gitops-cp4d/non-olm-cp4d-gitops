@@ -5,3 +5,12 @@ resources:
   - ccs-cluster.yaml
   - opensearch-cluster.yaml
   - cognos-analytics-cluster.yaml
+
+patches:
+  - path: patches/postgresql-webhooks-off.yaml
+    target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: postgresql-cluster-${appSuffix}
+      namespace: ${argocdNS}

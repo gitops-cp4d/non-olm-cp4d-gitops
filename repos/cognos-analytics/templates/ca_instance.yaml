@@ -6,7 +6,7 @@ metadata:
 spec:
   license:
     accept: true
-  installCCS: false
+  # installCCS: false
   fileStorageClass: {{ .Values.global.fileStorageClass }}
   blockStorageClass: {{ .Values.global.blockStorageClass }}
   # storageClass: {{ .Values.global.fileStorageClass }}
