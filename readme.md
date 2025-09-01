@@ -74,12 +74,6 @@ If you are using a [Techzone environment](https://techzone.ibm.com/collection/te
         ```
         oc logs deployment/post-installation-info -n <instanceNS>
         ```
-        or
-        ```
-        oc get route cpd -n <instanceNS> -o jsonpath='{.spec.host}'
-        oc get secret platform-auth-idp-credentials -n <instanceNS> -o jsonpath='{.data.admin_username}' | base64 --decode && echo
-        oc get secret platform-auth-idp-credentials -n <instanceNS> -o jsonpath='{.data.admin_password}' | base64 --decode && echo
-        ```
 
 6. Any further changes (including enabling/disabling cartridges by commenting/uncommenting their resources in `kustomization.yaml` after Software Hub installation is completed) should be committed and pushed to your Git repository directly. ArgoCD will automatically detect and synchronise all changes from Git. Installation will likely take over 1 hours or more depending on the number of services enabled
 

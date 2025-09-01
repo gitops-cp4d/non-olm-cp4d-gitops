@@ -39,17 +39,17 @@ roleRef:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: post-cpd-watcher
+  name: post-installation-info
   namespace: ${instanceNS}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: post-cpd-watcher
+      app: post-installation-info
   template:
     metadata:
       labels:
-        app: post-cpd-watcher
+        app: post-installation-info
     spec:
       serviceAccountName: read-creds-sa
       restartPolicy: Always
@@ -60,7 +60,7 @@ spec:
             - /bin/sh
             - -c
             - |
-              set -Eeuo pipefail
+              set -eu
 
               NS='${instanceNS}'
               CR='ibmcpd-cr'
