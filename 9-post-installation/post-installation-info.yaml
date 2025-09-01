@@ -1,0 +1,114 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: read-creds-sa
+  namespace: ${instanceNS}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: read-creds-role
+  namespace: ${instanceNS}
+rules:
+  - apiGroups: ["cpd.ibm.com"]
+    resources: ["ibmcpds"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["platform-auth-idp-credentials"]
+    verbs: ["get"]
+  - apiGroups: ["route.openshift.io"]
+    resources: ["routes"]
+    resourceNames: ["cpd"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-creds-rb
+  namespace: ${instanceNS}
+subjects:
+  - kind: ServiceAccount
+    name: read-creds-sa
+    namespace: ${instanceNS}
+roleRef:
+  kind: Role
+  name: read-creds-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-cpd-watcher
+  namespace: ${instanceNS}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: post-cpd-watcher
+  template:
+    metadata:
+      labels:
+        app: post-cpd-watcher
+    spec:
+      serviceAccountName: read-creds-sa
+      restartPolicy: Always
+      containers:
+        - name: watcher
+          image: bitnami/kubectl:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -Eeuo pipefail
+
+              NS='${instanceNS}'
+              CR='ibmcpd-cr'
+              SECRET='platform-auth-idp-credentials'
+              ROUTE='cpd'
+
+              echo "[INFO] Post-installation watcher started. Namespace=${NS}, CR=${CR}"
+
+              printed_flag=/tmp/printed
+
+              while true; do
+                if ! kubectl get ibmcpd "${CR}" -n "${NS}" >/dev/null 2>&1; then
+                  echo "[INFO] Ibmcpd/${CR} not found yet. Waiting..."
+                  sleep 60
+                  continue
+                fi
+
+                STATUS="$(kubectl get ibmcpd "${CR}" -n "${NS}" -o jsonpath='{.status.controlPlaneStatus}' 2>/dev/null || true)"
+                SUCC="$(kubectl get ibmcpd "${CR}" -n "${NS}" -o jsonpath='{range .status.conditions[?(@.type=="Successful")]}{.status}{end}' 2>/dev/null || true)"
+
+                if [ "${STATUS:-}" = "Completed" ] && [ "${SUCC:-}" = "True" ]; then
+                  if [ ! -f "${printed_flag}" ]; then
+                    echo "[INFO] CPD Completed & Successful detected. Fetching credentials..."
+                    USERNAME="$(kubectl get secret "${SECRET}" -n "${NS}" -o go-template='{{index .data "admin_username" | base64decode}}')"
+                    PASSWORD="$(kubectl get secret "${SECRET}" -n "${NS}" -o go-template='{{index .data "admin_password" | base64decode}}')"
+                    HOST="$(kubectl get route "${ROUTE}" -n "${NS}" -o jsonpath='{.spec.host}')"
+
+                    echo "===================== Software Hub Installation Done ========================="
+                    echo "IBM Software Hub URL: https://${HOST}"
+                    echo "Username: ${USERNAME}"
+                    echo "Password: ${PASSWORD}"
+                    echo "================================================================================"
+
+                    touch "${printed_flag}"
+                  else
+                    echo "[INFO] CPD still Completed & Successful. Monitoring continues..."
+                  fi
+
+                  sleep 300
+                else
+                  echo "[INFO] CPD status: controlPlaneStatus='${STATUS:-unknown}', Successful='${SUCC:-unknown}'."
+                  sleep 60
+                fi
+              done
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
