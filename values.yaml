@@ -54,6 +54,9 @@ global:
   planning-analytics:
     chart: planning-analytics
     version: 5.2.0+20250604.210250.1608.split
+  planning-analytics-instance:
+    chart: planning-analytics-instance
+    version: 5.2.0+20250604.210250.1608
   platform-config:
     chart: platform-config
     version: 5.2.0+20250402.154803.5

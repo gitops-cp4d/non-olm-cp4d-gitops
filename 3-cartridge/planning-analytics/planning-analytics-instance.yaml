@@ -14,8 +14,8 @@ spec:
   source:
     path: ''
     repoURL: ${helmRepoURL}
-    targetRevision: ${planning-analytics-version}
-    chart: ${planning-analytics-chart}
+    targetRevision: ${planning-analytics-instance-version}
+    chart: ${planning-analytics-instance-chart}
     helm:
       valuesObject:
         global:
