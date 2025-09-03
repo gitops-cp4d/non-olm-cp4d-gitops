@@ -1,0 +1,3 @@
+resources:
+  - post-installation-info.yaml
+  - postgresql-webhooks-off.yaml
