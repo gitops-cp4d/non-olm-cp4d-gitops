@@ -48,8 +48,8 @@ spec:
         args:
           - |
             set -euo pipefail
-            echo "sleeping 180s..."
-            sleep 180
+            echo "sleeping 30mins..."
+            sleep 1800
             kubectl -n ${argocdNS} patch application postgresql-cluster-gitops \
               --type merge \
               -p '{"spec":{"source":{"helm":{"valuesObject":{"webhook":{"mutating":{"create":false},"validating":{"create":false}}}}}}}'
